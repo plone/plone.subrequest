@@ -32,6 +32,11 @@ setup(
         'setuptools',
         'zope.globalrequest',
         ],
+    extras_require = {
+        'test': [
+            'plone.testing [z2]',
+            ],
+        },
     entry_points="""
     [z3c.autoinclude.plugin]
     target = plone
