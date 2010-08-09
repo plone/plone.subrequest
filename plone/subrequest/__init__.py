@@ -4,7 +4,8 @@ from ZPublisher.Publish import dont_publish_class
 from ZPublisher.Publish import missing_name
 from ZPublisher.mapply import mapply
 from cStringIO import StringIO
-from urlparse import urlsplit
+from posixpath import normpath
+from urlparse import urlsplit, urljoin
 from zope.globalrequest import getRequest, setRequest
 
 __all__ = ['subrequest']
@@ -20,8 +21,13 @@ CONDITIONAL_HEADERS = [
 
 def subrequest(path, stdout=None):
     _, _, path, query, _ = urlsplit(path)
+
     parent_request = getRequest()
+    here = '/'.join(parent_request._steps)
+    path = urljoin(here, path)
+    path = normpath(path)
     parent_app = parent_request.PARENTS[-1]
+    parent_published = parent_request.get('PUBLISHED')
     request = parent_request.clone()
     try:
         setRequest(request)
