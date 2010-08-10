@@ -19,7 +19,7 @@ CONDITIONAL_HEADERS = [
     'HTTP_IF_RANGE',
     ]
 
-def subrequest(url, stdout=None):
+def subrequest(url, root=None, stdout=None):
     assert url is not None, "You must pass a url"
     _, _, path, query, _ = urlsplit(url)
     parent_request = getRequest()
@@ -31,7 +31,12 @@ def subrequest(url, stdout=None):
         if vurl_parts is not None:
             # Use the virtual host root
             root_path = parent_request['PATH_INFO'][:-1-len(vurl_parts[2])]
-            path = root_path + path
+            if root is None:
+                path = root_path + path
+            else:
+                path = '%s/%s%s' % (root_path, root.virtual_url_path(), path)
+        elif root is not None:
+            path = '/%s%s' % (root.virtual_url_path(), path)
     else:
         try:
             # extra is the hidden part of the url, e.g. a default view

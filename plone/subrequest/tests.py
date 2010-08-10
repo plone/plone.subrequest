@@ -1,49 +1,34 @@
+import manuel.doctest
+import manuel.testcase
+import manuel.testing
 import unittest2 as unittest
+from plone.testing import Layer, layered, z2, zodb, zca
+
 from Products.Five.browser import BrowserView
-from plone.testing import Layer, z2, zodb, zca
 from plone.subrequest import subrequest
 from zope.globalrequest import setRequest
-
-TEST_ZCML = """\
-<configure xmlns="http://namespaces.zope.org/zope" xmlns:browser="http://namespaces.zope.org/browser">
-    <include package="plone.subrequest" />
-    <browser:page 
-        name="url"
-        for="*"
-        class="plone.subrequest.tests.URLView"
-        permission="zope.Public"
-        />
-    <browser:page 
-        name="root"
-        for="OFS.Application.Application"
-        class="plone.subrequest.tests.RootView"
-        permission="zope.Public"
-        />
-    <browser:page 
-        name="test"
-        for="*"
-        class="plone.subrequest.tests.TestView"
-        permission="zope.Public"
-        />
-    <browser:defaultView
-        for="OFS.Folder.Folder"
-        name="test"
-        />
-    <browser:defaultView
-        for="OFS.Application.Application"
-        name="root"
-        />
-</configure>
-"""
 
 class URLView(BrowserView):
     def __call__(self):
         return self.context.absolute_url()
 
 
+class ResponseWriteView(BrowserView):
+    def __call__(self):
+        response = self.request.response
+        response.write('Some data.\n')
+        response.write('Some more data.\n')
+
+
+class ErrorView(BrowserView):
+    def __call__(self):
+        raise Exception('An error')
+
+
 class RootView(BrowserView):
     def __call__(self):
         return 'Root: %s' % self.context.absolute_url()
+
 
 class TestView(BrowserView):
     def __call__(self):
@@ -52,6 +37,7 @@ class TestView(BrowserView):
             return 'No url parameter supplied.'
         response = subrequest(url)
         return response.body
+
 
 class Fixture(Layer):
     defaultBases = (z2.STARTUP,)
@@ -66,7 +52,8 @@ class Fixture(Layer):
 
         # Load out ZCML
         from zope.configuration import xmlconfig
-        xmlconfig.string(TEST_ZCML, context=context)
+        import plone.subrequest
+        xmlconfig.file('testing.zcml', plone.subrequest, context=context)
 
         with z2.zopeApp() as app:
             # Enable virtual hosting
@@ -134,7 +121,7 @@ class FunctionalTests(unittest.TestCase):
         self.assertEqual(self.browser.contents, expect_url)
 
 
-class IntegrationTests(unittest.TestCase):
+class IntegrationBase(object):
     layer = INTEGRATION_TESTING
 
     def setUp(self):
@@ -144,7 +131,10 @@ class IntegrationTests(unittest.TestCase):
         setRequest(request)
 
     def tearDown(self):
-        setRequest(None)
+        setRequest(None)    
+
+
+class IntegrationTests(IntegrationBase, unittest.TestCase):
 
     def test_absolute(self):
         response = subrequest('/folder1/@@url')
@@ -164,7 +154,6 @@ class IntegrationTests(unittest.TestCase):
         self.assertEqual(response.body, 'Root: http://nohost')
 
     def test_virtual_hosting(self):
-        #self.request.traverse('')
         url = "/VirtualHostBase/http/example.org:80/%s/VirtualHostRoot/_vh_fizz/_vh_buzz/_vh_fizzbuzz/%s" % ('folder1', 'folder1A/@@url')
         response = subrequest(url)
         self.assertEqual(response.body, 'http://example.org/fizz/buzz/fizzbuzz/folder1A')
@@ -178,5 +167,35 @@ class IntegrationTests(unittest.TestCase):
         response = subrequest('/notfound')
         self.assertEqual(response.status, 404)
 
+    def test_virtual_host_root(self):
+        parts = ('folder1', 'folder1A/@@url')
+        url = "/VirtualHostBase/http/example.org:80/%s/VirtualHostRoot/_vh_fizz/_vh_buzz/_vh_fizzbuzz/%s" % parts
+        self.request.traverse(url)
+        self.request['PATH_INFO'] = url
+        response = subrequest('/folder1B/@@url')
+        self.assertEqual(response.body, 'http://example.org/fizz/buzz/fizzbuzz/folder1B')
+
+    def test_virtual_host_root_with_root(self):
+        parts = ('folder1', 'folder1A/@@url')
+        url = "/VirtualHostBase/http/example.org:80/%s/VirtualHostRoot/_vh_fizz/_vh_buzz/_vh_fizzbuzz/%s" % parts
+        self.request.traverse(url)
+        self.request['PATH_INFO'] = url
+        response = subrequest('/folder1Ai/@@url', root=self.app.folder1.folder1A)
+        self.assertEqual(response.body, 'http://example.org/fizz/buzz/fizzbuzz/folder1A/folder1Ai')
+
+    def test_subrequest_root(self):
+        response = subrequest('/folder1Ai/@@url', root=self.app.folder1.folder1A)
+        self.assertEqual(response.body, 'http://nohost/folder1/folder1A/folder1Ai')
+
+
+
 def test_suite():
-    return unittest.defaultTestLoader.loadTestsFromName(__name__)
+    class DocTestCase(IntegrationBase, manuel.testing.TestCase):
+        pass
+    
+    suite = unittest.defaultTestLoader.loadTestsFromName(__name__)
+    m = manuel.doctest.Manuel()
+    #m += manuel.testcase.SectionManuel() # too many
+    m += manuel.testcase.MarkerManuel()
+    suite.addTest(manuel.testing.TestSuite(m, '../../README.txt', TestCase=DocTestCase, globs=dict(subrequest=subrequest)))
+    return suite

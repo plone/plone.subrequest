@@ -1,0 +1,52 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser">
+
+    <include package="plone.subrequest" />
+
+    <browser:page 
+        name="url"
+        for="*"
+        class="plone.subrequest.tests.URLView"
+        permission="zope.Public"
+        />
+
+    <browser:page 
+        name="write"
+        for="*"
+        class="plone.subrequest.tests.ResponseWriteView"
+        permission="zope.Public"
+        />
+
+    <browser:page 
+        name="error"
+        for="*"
+        class="plone.subrequest.tests.ErrorView"
+        permission="zope.Public"
+        />
+
+    <browser:page 
+        name="root"
+        for="OFS.Application.Application"
+        class="plone.subrequest.tests.RootView"
+        permission="zope.Public"
+        />
+
+    <browser:page 
+        name="test"
+        for="*"
+        class="plone.subrequest.tests.TestView"
+        permission="zope.Public"
+        />
+
+    <browser:defaultView
+        for="OFS.Folder.Folder"
+        name="test"
+        />
+
+    <browser:defaultView
+        for="OFS.Application.Application"
+        name="root"
+        />
+
+</configure>

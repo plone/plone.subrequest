@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-version = '1.0'
+version = '1.1'
 
 setup(
     name = 'plone.subrequest',
@@ -35,6 +35,7 @@ setup(
     extras_require = {
         'test': [
             'plone.testing [z2]',
+            'manuel',
             ],
         },
     entry_points="""
