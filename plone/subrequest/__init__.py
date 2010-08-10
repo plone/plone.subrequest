@@ -19,15 +19,28 @@ CONDITIONAL_HEADERS = [
     'HTTP_IF_RANGE',
     ]
 
-def subrequest(path, stdout=None):
-    _, _, path, query, _ = urlsplit(path)
-
+def subrequest(url, stdout=None):
+    assert url is not None, "You must pass a url"
+    _, _, path, query, _ = urlsplit(url)
     parent_request = getRequest()
-    here = '/'.join(parent_request._steps)
-    path = urljoin(here, path)
-    path = normpath(path)
+    assert parent_request is not None, "Unable to get request, perhaps zope.globalrequest is not configured."
     parent_app = parent_request.PARENTS[-1]
-    parent_published = parent_request.get('PUBLISHED')
+    if path.startswith('/'):
+        path = normpath(path)
+        vurl_parts = parent_request.get('VIRTUAL_URL_PARTS')
+        if vurl_parts is not None:
+            # Use the virtual host root
+            root_path = parent_request['PATH_INFO'][:-1-len(vurl_parts[2])]
+            path = root_path + path
+    else:
+        try:
+            # extra is the hidden part of the url, e.g. a default view
+            extra = parent_request['URL'][len(parent_request['ACTUAL_URL']):]
+        except KeyError:
+            extra = ''
+        here = parent_request['PATH_INFO'] + extra
+        path = urljoin(here, path)
+        path = normpath(path)
     request = parent_request.clone()
     try:
         setRequest(request)
@@ -46,18 +59,21 @@ def subrequest(path, stdout=None):
         # Clean up the request.
         for header in CONDITIONAL_HEADERS:
             environ.pop(header, None)
-        traversed = request.traverse(path)
-        request.processInputs()
-        result = mapply(traversed, positional=request.args,
-                        keyword=request,
-                        debug=None,
-                        maybe=1,
-                        missing_name=missing_name,
-                        handle_class=dont_publish_class,
-                        context=request,
-                        bind=1)
-        if result is not response:
-            response.setBody(result)
+        try:
+            traversed = request.traverse(path)
+            request.processInputs()
+            result = mapply(traversed, positional=request.args,
+                            keyword=request,
+                            debug=None,
+                            maybe=1,
+                            missing_name=missing_name,
+                            handle_class=dont_publish_class,
+                            context=request,
+                            bind=1)
+            if result is not response:
+                response.setBody(result)
+        except:
+            response.exception()
         return response
     finally:
         request.clear()
