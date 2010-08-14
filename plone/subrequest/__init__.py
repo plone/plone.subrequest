@@ -7,6 +7,12 @@ from cStringIO import StringIO
 from posixpath import normpath
 from urlparse import urlsplit, urljoin
 from zope.globalrequest import getRequest, setRequest
+try:
+    from zope.component.hooks import getSite, setSite
+except ImportError:
+    from zope.site.hooks import getSite, setSite
+except ImportError:
+    from zope.app.component.hooks import getSite, setSite
 
 __all__ = ['subrequest']
 
@@ -24,6 +30,7 @@ def subrequest(url, root=None, stdout=None):
     _, _, path, query, _ = urlsplit(url)
     parent_request = getRequest()
     assert parent_request is not None, "Unable to get request, perhaps zope.globalrequest is not configured."
+    parent_site = getSite()
     parent_app = parent_request.PARENTS[-1]
     if path.startswith('/'):
         path = normpath(path)
@@ -84,3 +91,4 @@ def subrequest(url, root=None, stdout=None):
     finally:
         request.clear()
         setRequest(parent_request)
+        setSite(parent_site)

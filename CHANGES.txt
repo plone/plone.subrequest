@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.2 - unreleased
+----------------
+
+- Restore zope.component site after subrequest.
+  [elro]
+
 1.1 - 2010-08-14
 ----------------
 
