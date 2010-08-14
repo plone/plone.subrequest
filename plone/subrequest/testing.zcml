@@ -7,35 +7,35 @@
     <browser:page 
         name="url"
         for="*"
-        class="plone.subrequest.tests.URLView"
+        class="plone.subrequest.testing.URLView"
         permission="zope.Public"
         />
 
     <browser:page 
-        name="write"
+        name="response-write"
         for="*"
-        class="plone.subrequest.tests.ResponseWriteView"
+        class="plone.subrequest.testing.ResponseWriteView"
         permission="zope.Public"
         />
 
     <browser:page 
         name="error"
         for="*"
-        class="plone.subrequest.tests.ErrorView"
+        class="plone.subrequest.testing.ErrorView"
         permission="zope.Public"
         />
 
     <browser:page 
         name="root"
         for="OFS.Application.Application"
-        class="plone.subrequest.tests.RootView"
+        class="plone.subrequest.testing.RootView"
         permission="zope.Public"
         />
 
     <browser:page 
         name="test"
         for="*"
-        class="plone.subrequest.tests.TestView"
+        class="plone.subrequest.testing.SubrequestView"
         permission="zope.Public"
         />
 

@@ -1,14 +1,14 @@
 Changelog
 =========
 
-1.1 - unreleased
+1.1 - 2010-08-14
 ----------------
 
-- Virtual hosting and error response support.
+- Virtual hosting, relative url and error response support.
+  [elro]
 
 1.0 - 2010-07-28
 ----------------
 
 - Initial release.
   [elro]
- 
