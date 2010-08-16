@@ -1,4 +1,6 @@
+import OFS.Folder
 from Products.Five.browser import BrowserView
+from five.localsitemanager import make_site
 from plone.subrequest import subrequest
 from plone.testing import Layer, z2, zodb, zca
 from zope.globalrequest import getRequest, setRequest
@@ -65,10 +67,12 @@ class PLONE_SUBREQEST_FIXTURE(Layer):
             vhm.manage_afterAdd(vhm, app)
             # Setup default content
             app.manage_addFolder('folder1')
+            make_site(app.folder1)
             app.folder1.manage_addFolder('folder1A')
             app.folder1.folder1A.manage_addFolder('folder1Ai')
             app.folder1.manage_addFolder('folder1B')
             app.manage_addFolder('folder2')
+            make_site(app.folder2)
             app.folder2.manage_addFolder('folder2A')
 
     def tearDown(self):

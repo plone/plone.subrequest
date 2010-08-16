@@ -7,6 +7,7 @@ from plone.subrequest import subrequest
 from plone.subrequest.testing import INTEGRATION_TESTING, FUNCTIONAL_TESTING
 from plone.testing import z2
 from zope.globalrequest import getRequest
+from zope.site.hooks import getSite
 
 def traverse(url):
     request = getRequest()
@@ -105,6 +106,14 @@ class IntegrationTests(unittest.TestCase):
         response = subrequest('/folder1Ai/@@url', root=app.folder1.folder1A)
         self.assertEqual(response.body, 'http://nohost/folder1/folder1A/folder1Ai')
 
+    def test_site(self):
+        app = self.layer['app']
+        traverse('/folder1')
+        site_url1 = getSite().absolute_url()
+        response = subrequest('/folder2/@@url')
+        self.assertEqual(response.status, 200)
+        site_url2 = getSite().absolute_url()
+        self.assertEqual(site_url1, site_url2)
 
 def test_suite():
     suite = unittest.defaultTestLoader.loadTestsFromName(__name__)

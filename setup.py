@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-version = '1.1'
+version = '1.2'
 
 setup(
     name = 'plone.subrequest',
@@ -34,8 +34,9 @@ setup(
         ],
     extras_require = {
         'test': [
-            'plone.testing [z2]',
+            'five.localsitemanager',
             'manuel',
+            'plone.testing [z2]',
             ],
         },
     entry_points="""

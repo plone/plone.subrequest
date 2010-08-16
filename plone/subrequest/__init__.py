@@ -8,8 +8,6 @@ from posixpath import normpath
 from urlparse import urlsplit, urljoin
 from zope.globalrequest import getRequest, setRequest
 try:
-    from zope.component.hooks import getSite, setSite
-except ImportError:
     from zope.site.hooks import getSite, setSite
 except ImportError:
     from zope.app.component.hooks import getSite, setSite
