@@ -74,6 +74,7 @@ class PLONE_SUBREQEST_FIXTURE(Layer):
             app.manage_addFolder('folder2')
             make_site(app.folder2)
             app.folder2.manage_addFolder('folder2A')
+            app.folder2.folder2A.manage_addFolder('folder2Ai space')
 
     def tearDown(self):
         # Zap the stacked configuration context

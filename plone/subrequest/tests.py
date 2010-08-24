@@ -101,6 +101,14 @@ class IntegrationTests(unittest.TestCase):
         response = subrequest('/folder1Ai/@@url', root=app.folder1.folder1A)
         self.assertEqual(response.body, 'http://example.org/fizz/buzz/fizzbuzz/folder1A/folder1Ai')
 
+    def test_virtual_host_space(self):
+        parts = ('folder2', 'folder2A/folder2Ai space/@@url')
+        url = "/VirtualHostBase/http/example.org:80/%s/VirtualHostRoot/%s" % parts
+        traverse(url)
+        app = self.layer['app']
+        response = subrequest('/folder2A/@@url', root=app.folder2)
+        self.assertEqual(response.body, 'http://example.org/folder2A')
+
     def test_subrequest_root(self):
         app = self.layer['app']
         response = subrequest('/folder1Ai/@@url', root=app.folder1.folder1A)

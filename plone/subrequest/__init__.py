@@ -6,6 +6,7 @@ from ZPublisher.mapply import mapply
 from cStringIO import StringIO
 from posixpath import normpath
 from urlparse import urlsplit, urljoin
+from urllib import unquote # Python2.4 does not have urlparse.unquote
 from zope.globalrequest import getRequest, setRequest
 try:
     from zope.site.hooks import getSite, setSite
@@ -35,7 +36,7 @@ def subrequest(url, root=None, stdout=None):
         vurl_parts = parent_request.get('VIRTUAL_URL_PARTS')
         if vurl_parts is not None:
             # Use the virtual host root
-            path_past_root = vurl_parts[-1]
+            path_past_root = unquote(vurl_parts[-1])
             root_path = parent_request['PATH_INFO'][:-1-len(path_past_root)]
             if root is None:
                 path = root_path + path

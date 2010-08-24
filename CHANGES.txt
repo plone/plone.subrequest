@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.3 - 2010-08-24
+----------------
+
+- Fixed bug with virtual hosting and quoted paths.
+  [elro]
+
 1.2 - 2010-08-16
 ----------------
 
