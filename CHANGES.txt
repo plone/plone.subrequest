@@ -1,10 +1,11 @@
 Changelog
 =========
 
-1.4 - unreleased
+1.4 - 2010-11-10
 ----------------
 
-
+- First processInput, then traverse (fixes #11254)
+  [awello]
 
 1.3 - 2010-08-24
 ----------------
