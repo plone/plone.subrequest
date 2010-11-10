@@ -6,6 +6,17 @@ from plone.testing import Layer, z2, zodb, zca
 from zope.globalrequest import getRequest, setRequest
 
 
+class ParameterView(BrowserView):
+
+    def __init__(self, context, request):
+        super(ParameterView, self).__init__(context, request)
+        self.keys = self.request.keys()
+
+    def __call__(self):
+        response = self.request.response
+        return str(self.keys)
+
+
 class URLView(BrowserView):
     def __call__(self):
         return self.context.absolute_url()

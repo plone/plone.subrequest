@@ -4,6 +4,13 @@
 
     <include package="plone.subrequest" />
 
+    <browser:page
+        name="parameter"
+        for="*"
+        class="plone.subrequest.testing.ParameterView"
+        permission="zope.Public"
+        />
+
     <browser:page 
         name="url"
         for="*"

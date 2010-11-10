@@ -123,6 +123,10 @@ class IntegrationTests(unittest.TestCase):
         site_url2 = getSite().absolute_url()
         self.assertEqual(site_url1, site_url2)
 
+    def test_parameter(self):
+        response = subrequest('/folder1/@@parameter?foo=bar')
+        self.assertTrue('foo' in response.body)
+
 def test_suite():
     suite = unittest.defaultTestLoader.loadTestsFromName(__name__)
     m = manuel.doctest.Manuel()

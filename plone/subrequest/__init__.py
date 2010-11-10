@@ -72,8 +72,8 @@ def subrequest(url, root=None, stdout=None):
         for header in CONDITIONAL_HEADERS:
             environ.pop(header, None)
         try:
-            traversed = request.traverse(path)
             request.processInputs()
+            traversed = request.traverse(path)
             result = mapply(traversed, positional=request.args,
                             keyword=request,
                             debug=None,
