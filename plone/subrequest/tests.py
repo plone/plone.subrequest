@@ -127,6 +127,11 @@ class IntegrationTests(unittest.TestCase):
         response = subrequest('/folder1/@@parameter?foo=bar')
         self.assertTrue('foo' in response.body)
 
+    def test_cookies(self):
+        response = subrequest('/folder1/@@test?url=/folder1/cookie')
+        self.assertTrue('cookie_name' in response.cookies)
+
+
 def test_suite():
     suite = unittest.defaultTestLoader.loadTestsFromName(__name__)
     m = manuel.doctest.Manuel()

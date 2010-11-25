@@ -6,6 +6,13 @@ from plone.testing import Layer, z2, zodb, zca
 from zope.globalrequest import getRequest, setRequest
 
 
+class CookieView(BrowserView):
+
+    def __call__(self):
+        response = self.request.response
+        response.setCookie('cookie_name', 'cookie_value')
+
+
 class ParameterView(BrowserView):
 
     def __init__(self, context, request):

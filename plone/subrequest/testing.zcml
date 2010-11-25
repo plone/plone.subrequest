@@ -5,6 +5,13 @@
     <include package="plone.subrequest" />
 
     <browser:page
+        name="cookie"
+        for="*"
+        class="plone.subrequest.testing.CookieView"
+        permission="zope.Public"
+        />
+
+    <browser:page
         name="parameter"
         for="*"
         class="plone.subrequest.testing.ParameterView"
