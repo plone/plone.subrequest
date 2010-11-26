@@ -84,12 +84,12 @@ def subrequest(url, root=None, stdout=None):
                             bind=1)
             if result is not response:
                 response.setBody(result)
+            for key, value in request.response.cookies.items():
+                parent_request.response.cookies[key] = value
         except:
             response.exception()
         return response
     finally:
-        for key, value in request.response.cookies.items():
-            parent_request.response.cookies[key] = value
         request.clear()
         setRequest(parent_request)
         setSite(parent_site)
