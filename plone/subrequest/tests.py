@@ -131,6 +131,43 @@ class IntegrationTests(unittest.TestCase):
         response = subrequest('/folder1/@@test?url=/folder1/cookie')
         self.assertTrue('cookie_name' in response.cookies)
 
+    def test_stream_iterator(self):
+        # Only a ZServerHTTPResponse is IStreamIterator Aware
+        from ZServer.HTTPResponse import ZServerHTTPResponse
+        request = getRequest()
+        request.response.__class__ = ZServerHTTPResponse
+        response = subrequest('/@@stream')
+        self.assertEqual(response.getBody(), "hello")
+
+    def test_filestream_iterator(self):
+        # Only a ZServerHTTPResponse is IStreamIterator Aware
+        from ZServer.HTTPResponse import ZServerHTTPResponse
+        request = getRequest()
+        request.response.__class__ = ZServerHTTPResponse
+        response = subrequest('/@@filestream')
+        from ZPublisher.Iterators import filestream_iterator
+        self.assertTrue(isinstance(response.stdout, filestream_iterator))
+        self.assertEqual(response.getBody(), "Test")
+
+
+try:
+    import plone.app.blob
+except ImportError:
+    pass
+else:
+    class BlobTests(unittest.TestCase):
+        layer = INTEGRATION_TESTING
+
+        def test_blobstream_iterator(self):
+            # Only a ZServerHTTPResponse is IStreamIterator Aware
+            from ZServer.HTTPResponse import ZServerHTTPResponse
+            request = getRequest()
+            request.response.__class__ = ZServerHTTPResponse
+            response = subrequest('/@@blobstream')
+            from ZODB.blob import BlobFile
+            self.assertTrue(isinstance(response.stdout, BlobFile))
+            self.assertEqual(response.getBody(), "Hi, Blob!")
+
 
 def test_suite():
     suite = unittest.defaultTestLoader.loadTestsFromName(__name__)

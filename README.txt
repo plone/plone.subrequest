@@ -38,23 +38,61 @@ Call ``subrequest(url)``, it returns a response object.
 
     >>> from plone.subrequest import subrequest
     >>> response = subrequest('/folder1/@@url')
-
-The output of the response is normally written to the response body.
-
-    >>> response.body
+    >>> response.getBody()
     'http://nohost/folder1'
 
 .. test-case: response-write
 
-Be aware that some code may call ``response.write(data)``
+``response.getBody()`` also works for code that calls ``response.write(data)``.
 
     >>> response = subrequest('/@@response-write')
-    >>> response.stdout.getvalue()
+    >>> response.getBody()
     'Some data.\nSome more data.\n'
 
-so it's usually best to retrieve the output with:
+But in this case ``response.getBody()`` may only be called once.
 
-    >>> result = response.body or response.stdout.getvalue()
+    >>> response.getBody()
+    Traceback (most recent call last):
+        ...
+    ValueError: I/O operation on closed file
+
+Accessing the response body as a file
+-------------------------------------
+
+.. test-case: stdout
+
+Some code may call ``response.write(data)``.
+
+    >>> response = subrequest('/@@response-write')
+
+In which case you may access response.stdout as file.
+
+    >>> response.stdout.seek(0, 0)
+    >>> list(response.stdout)
+    ['Some data.\n', 'Some more data.\n']
+
+You can test whether a file was returned using ``response._wrote``.
+
+    >>> response._wrote
+    1
+
+When you're done, close the file:
+
+    >>> response.stdout.close()
+
+.. test-case: response-outputBody
+
+Use ``response.outputBody()`` to ensure the body may be accessed as a file.
+
+    >>> from plone.subrequest import subrequest
+    >>> response = subrequest('/folder1/@@url')
+    >>> response._wrote
+    >>> response.outputBody()
+    >>> response._wrote
+    1
+    >>> response.stdout.seek(0, 0)
+    >>> list(response.stdout)
+    ['http://nohost/folder1']
 
 Relative paths
 --------------
@@ -65,7 +103,7 @@ Relative paths are resolved relative to the parent request's location:
 
     >>> request = traverse('/folder1/@@test')
     >>> response = subrequest('folder1A/@@url')
-    >>> response.body
+    >>> response.getBody()
     'http://nohost/folder1/folder1A'
 
 .. test-case: relative-default-view
@@ -76,7 +114,7 @@ This takes account of default view's url.
     >>> request['URL']
     'http://nohost/folder1/@@test'
     >>> response = subrequest('folder1A/@@url')
-    >>> response.body
+    >>> response.getBody()
     'http://nohost/folder1/folder1A'
 
 Virtual hosting
@@ -88,7 +126,7 @@ When virtual hosting is used, absolute paths are traversed from the virtual host
 
     >>> request = traverse('/VirtualHostBase/http/example.org:80/folder1/VirtualHostRoot/')
     >>> response = subrequest('/folder1A/@@url')
-    >>> response.body
+    >>> response.getBody()
     'http://example.org/folder1A'
 
 Specifying the root
@@ -100,7 +138,7 @@ You may also set the root object explicitly
 
     >>> app = layer['app']
     >>> response = subrequest('/folder1A/@@url', root=app.folder1)
-    >>> response.body
+    >>> response.getBody()
     'http://nohost/folder1/folder1A'
 
 Error responses
@@ -127,5 +165,5 @@ Or might raise an error.
 So check for the expected status.
 
     >>> response = subrequest('/')
-    >>> response.status
-    200
+    >>> response.status == 200
+    True

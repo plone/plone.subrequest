@@ -4,7 +4,11 @@ Changelog
 1.6 - unreleased
 ----------------
 
+- Handle IStreamIterator.
+  [elro]
 
+- Simplify API so ``response.getBody()`` always works.
+  [elro]
 
 1.5 - 2010-11-26
 ----------------

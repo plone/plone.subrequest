@@ -13,7 +13,9 @@ try:
 except ImportError:
     from zope.app.component.hooks import getSite, setSite
 
-__all__ = ['subrequest']
+from subresponse import SubResponse
+
+__all__ = ['subrequest', 'SubResponse']
 
 # http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html
 CONDITIONAL_HEADERS = [
@@ -22,6 +24,7 @@ CONDITIONAL_HEADERS = [
     'HTTP_IF_MATCH',
     'HTTP_IF_NONE_MATCH',
     'HTTP_IF_RANGE',
+    'HTTP_RANGE', # Not strictly a conditional header, but scrub it anyway
     ]
 
 def subrequest(url, root=None, stdout=None):
@@ -60,11 +63,11 @@ def subrequest(url, root=None, stdout=None):
         app = aq_base(parent_app).__of__(request_container)
         request['PARENTS'] = [app]
         response = request.response
+        response.__class__ = SubResponse
         response.stderr = None # only used on retry it seems
         if stdout is None:
             stdout = StringIO() # It might be possible to optimize this
         response.stdout = stdout
-        response.write = stdout.write # the write method is non standard
         environ = request.environ
         environ['PATH_INFO'] = path
         environ['QUERY_STRING'] = query
