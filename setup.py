@@ -37,6 +37,7 @@ setup(
             'five.localsitemanager',
             'manuel',
             'plone.testing [z2]',
+            'plone.app.blob',
             ],
         },
     entry_points="""
