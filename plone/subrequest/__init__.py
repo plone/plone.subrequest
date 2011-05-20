@@ -7,13 +7,15 @@ from cStringIO import StringIO
 from posixpath import normpath
 from urlparse import urlsplit, urljoin
 from urllib import unquote # Python2.4 does not have urlparse.unquote
+from zope.interface import alsoProvides
 from zope.globalrequest import getRequest, setRequest
 try:
     from zope.site.hooks import getSite, setSite
 except ImportError:
     from zope.app.component.hooks import getSite, setSite
 
-from subresponse import SubResponse
+from plone.subrequest.subresponse import SubResponse
+from plone.subrequest.interfaces import ISubRequest
 
 __all__ = ['subrequest', 'SubResponse']
 
@@ -57,6 +59,8 @@ def subrequest(url, root=None, stdout=None):
         path = urljoin(here, path)
         path = normpath(path)
     request = parent_request.clone()
+    request['PARENT_REQUEST'] = parent_request
+    alsoProvides(request, ISubRequest)
     try:
         setRequest(request)
         request_container = RequestContainer(REQUEST=request)

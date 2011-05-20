@@ -4,6 +4,9 @@ Changelog
 1.6b2 - unreleased
 ------------------
 
+- Set PARENT_REQUEST and add ISubRequest interface to subrequests.
+  [elro]
+
 1.6b1 - 2011-02-11
 ------------------
 
