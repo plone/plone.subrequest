@@ -167,3 +167,11 @@ So check for the expected status.
     >>> response = subrequest('/')
     >>> response.status == 200
     True
+
+Handling subrequests
+--------------------
+
+The parent request is set as PARENT_REQUEST onto subrequests.
+
+Subrequests also provide the ``plone.subrequest.interfaces.ISubRequest``
+marker interface.
