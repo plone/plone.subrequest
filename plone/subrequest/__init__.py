@@ -31,6 +31,8 @@ CONDITIONAL_HEADERS = [
 
 def subrequest(url, root=None, stdout=None):
     assert url is not None, "You must pass a url"
+    if isinstance(url, unicode):
+        url = url.decode('utf-8')
     _, _, path, query, _ = urlsplit(url)
     parent_request = getRequest()
     assert parent_request is not None, "Unable to get request, perhaps zope.globalrequest is not configured."
