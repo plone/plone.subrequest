@@ -26,7 +26,10 @@ class ParameterView(BrowserView):
 
 class URLView(BrowserView):
     def __call__(self):
-        return self.context.absolute_url()
+        url = self.context.absolute_url()
+        # The absolute url is expected to be an encoded string, not unicode.
+        assert isinstance(url, str)
+        return url
 
 
 class ResponseWriteView(BrowserView):

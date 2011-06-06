@@ -77,6 +77,11 @@ class IntegrationTests(unittest.TestCase):
         response = subrequest(url)
         self.assertEqual(response.body, 'http://example.org/fizz/buzz/fizzbuzz/folder1A')
 
+    def test_virtual_hosting_unicode(self):
+        url = u"/VirtualHostBase/http/example.org:80/%s/VirtualHostRoot/_vh_fizz/_vh_buzz/_vh_fizzbuzz/%s" % ('folder1', 'folder1A/@@url')
+        response = subrequest(url)
+        self.assertEqual(response.body, 'http://example.org/fizz/buzz/fizzbuzz/folder1A')
+
     def test_virtual_hosting_relative(self):
         url = "/VirtualHostBase/http/example.org:80/%s/VirtualHostRoot/_vh_fizz/_vh_buzz/_vh_fizzbuzz/%s" % ('folder1', 'folder1A?url=folder1B/@@url')
         response = subrequest(url)
