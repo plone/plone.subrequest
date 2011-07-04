@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.6.1 - unreleased
+1.6.1 - 2011-07-04
 ------------------
 
 - Move tests to package directory to making testing possible when installed
