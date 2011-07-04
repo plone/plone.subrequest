@@ -169,7 +169,7 @@ def test_suite():
     suite = unittest.defaultTestLoader.loadTestsFromName(__name__)
     m = manuel.doctest.Manuel()
     m += manuel.testcase.MarkerManuel()
-    doctests = manuel.testing.TestSuite(m, '../../README.txt', globs=dict(subrequest=subrequest, traverse=traverse))
+    doctests = manuel.testing.TestSuite(m, 'usage.txt', globs=dict(subrequest=subrequest, traverse=traverse))
     # Set the layer on the manuel doctests for now
     for test in doctests:
         test.layer = INTEGRATION_TESTING
