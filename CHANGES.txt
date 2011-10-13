@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.6.2 - 2011-07-04
+------------------
+
+- Handle spaces in default documents. http://dev.plone.org/plone/ticket/12278
+
 1.6.1 - 2011-07-04
 ------------------
 

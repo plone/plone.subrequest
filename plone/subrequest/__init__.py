@@ -54,7 +54,7 @@ def subrequest(url, root=None, stdout=None):
     else:
         try:
             # extra is the hidden part of the url, e.g. a default view
-            extra = parent_request['URL'][len(parent_request['ACTUAL_URL']):]
+            extra = unquote(parent_request['URL'][len(parent_request['ACTUAL_URL']):])
         except KeyError:
             extra = ''
         here = parent_request['PATH_INFO'] + extra
