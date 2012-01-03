@@ -11,7 +11,7 @@ class SubResponse(HTTPResponse):
     def setBody(self, body, title='', is_error=0, **kw):
         """ Accept either a stream iterator or a string as the body """
         if not IStreamIterator.providedBy(body):
-            return HTTPResponse.setBody(self, body, title, is_error, **kw)        
+            return HTTPResponse.setBody(self, body, title, is_error, **kw)
         assert not self._wrote
         if isinstance(body, BlobStreamIterator):
             body = body.blob # A BlobFile

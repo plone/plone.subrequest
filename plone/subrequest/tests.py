@@ -49,7 +49,7 @@ class FunctionalTests(unittest.TestCase):
         url = "http://nohost/VirtualHostBase/http/example.org:80/%s/VirtualHostRoot/_vh_fizz/_vh_buzz/_vh_fizzbuzz/%s" % parts
         expect_url = 'http://example.org/fizz/buzz/fizzbuzz/%s' % expect
         self.browser.open(url)
-        self.assertEqual(self.browser.contents, expect_url)   
+        self.assertEqual(self.browser.contents, expect_url)
 
 
 class IntegrationTests(unittest.TestCase):
