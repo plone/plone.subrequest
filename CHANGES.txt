@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.6.3 - unreleased
+1.6.3 - 2012-02-12
 ------------------
 
 - Copy ``other`` request variables such as ``LANGUAGE`` to subrequest.
