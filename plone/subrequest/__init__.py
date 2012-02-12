@@ -61,6 +61,7 @@ def subrequest(url, root=None, stdout=None):
         path = urljoin(here, path)
         path = normpath(path)
     request = parent_request.clone()
+    request.other.update(parent_request.other)
     request['PARENT_REQUEST'] = parent_request
     alsoProvides(request, ISubRequest)
     try:

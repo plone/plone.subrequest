@@ -4,6 +4,9 @@ Changelog
 1.6.3 - unreleased
 ------------------
 
+- Copy ``other`` request variables such as ``LANGUAGE`` to subrequest.
+  [elro]
+
 1.6.2 - 2011-07-04
 ------------------
 

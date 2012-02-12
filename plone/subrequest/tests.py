@@ -164,6 +164,12 @@ class IntegrationTests(unittest.TestCase):
         self.assertTrue(isinstance(response.stdout, BlobFile))
         self.assertEqual(response.getBody(), "Hi, Blob!")
 
+    def test_other_variables(self):
+        request = getRequest()
+        request['foo'] = 'bar'
+        response = subrequest('/folder1/@@parameter')
+        self.assertTrue('foo' in response.body)
+
 
 def test_suite():
     suite = unittest.defaultTestLoader.loadTestsFromName(__name__)
