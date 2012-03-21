@@ -1,3 +1,5 @@
+import re
+
 from Acquisition import aq_base
 from ZPublisher.BaseRequest import RequestContainer
 from ZPublisher.Publish import dont_publish_class
@@ -28,6 +30,23 @@ CONDITIONAL_HEADERS = [
     'HTTP_IF_RANGE',
     'HTTP_RANGE', # Not strictly a conditional header, but scrub it anyway
     ]
+
+OTHER_IGNORE = set([
+    'ACTUAL_URL',
+    'LANGUAGE_TOOL',
+    'PARENT_REQUEST',
+    'PUBLISHED',
+    'SERVER_URL',
+    'TraversalRequestNameStack',
+    'URL',
+    'VIRTUAL_URL',
+    'VIRTUAL_URL_PARTS',
+    'VirtualRootPhysicalPath',
+    'method',
+    'traverse_subpath',
+    ])
+
+OTHER_IGNORE_RE = re.compile(r'^(?:BASE|URL)\d+$')
 
 def subrequest(url, root=None, stdout=None):
     assert url is not None, "You must pass a url"
@@ -61,7 +80,10 @@ def subrequest(url, root=None, stdout=None):
         path = urljoin(here, path)
         path = normpath(path)
     request = parent_request.clone()
-    request.other.update(parent_request.other)
+    for name, parent_value in parent_request.other.items():
+        if name in OTHER_IGNORE or OTHER_IGNORE_RE.match(name):
+            continue
+        request.other[name] = parent_value
     request['PARENT_REQUEST'] = parent_request
     alsoProvides(request, ISubRequest)
     try:

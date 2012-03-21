@@ -167,8 +167,12 @@ class IntegrationTests(unittest.TestCase):
     def test_other_variables(self):
         request = getRequest()
         request['foo'] = 'bar'
+        request['VIRTUAL_URL'] = 'parent'
+        request['URL9'] = 'parent'
         response = subrequest('/folder1/@@parameter')
-        self.assertTrue('foo' in response.body)
+        self.assertTrue("'foo'" in response.body)
+        self.assertFalse("'URL9'" in response.body)
+        self.assertFalse("'VIRTUAL_URL'" in response.body)
 
 
 def test_suite():

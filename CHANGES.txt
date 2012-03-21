@@ -4,6 +4,10 @@ Changelog
 1.6.4 - unreleased
 ------------------
 
+- Fix problems with double encoding some unicode charse by not copying too
+  many ``other`` variables.
+  [elro]
+
 1.6.3 - 2012-02-12
 ------------------
 
