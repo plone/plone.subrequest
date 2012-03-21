@@ -34,8 +34,10 @@ CONDITIONAL_HEADERS = [
 OTHER_IGNORE = set([
     'ACTUAL_URL',
     'LANGUAGE_TOOL',
+    'PARENTS',
     'PARENT_REQUEST',
     'PUBLISHED',
+    'RESPONSE',
     'SERVER_URL',
     'TraversalRequestNameStack',
     'URL',
@@ -81,7 +83,7 @@ def subrequest(url, root=None, stdout=None):
         path = normpath(path)
     request = parent_request.clone()
     for name, parent_value in parent_request.other.items():
-        if name in OTHER_IGNORE or OTHER_IGNORE_RE.match(name):
+        if name in OTHER_IGNORE or OTHER_IGNORE_RE.match(name) or name.startswith('_'):
             continue
         request.other[name] = parent_value
     request['PARENT_REQUEST'] = parent_request
