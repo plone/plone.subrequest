@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.6.4 - unreleased
+1.6.4 - 2012-03-22
 ------------------
 
 - Fix problems with double encoding some unicode charse by not copying too
