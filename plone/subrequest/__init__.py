@@ -74,8 +74,11 @@ def subrequest(url, root=None, stdout=None):
             path = '/%s%s' % (root.virtual_url_path(), path)
     else:
         try:
+            parent_url = parent_request['URL']
+            if isinstance(parent_url, unicode):
+                parent_url = parent_url.encode('utf-8')
             # extra is the hidden part of the url, e.g. a default view
-            extra = unquote(parent_request['URL'][len(parent_request['ACTUAL_URL']):])
+            extra = unquote(parent_url[len(parent_request['ACTUAL_URL']):])
         except KeyError:
             extra = ''
         here = parent_request['PATH_INFO'] + extra

@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.6.5 - unreleased
+------------------
+
+- Ensure parent url is a string and not unicode.
+  [davisagli]
+
 1.6.4 - 2012-03-22
 ------------------
 

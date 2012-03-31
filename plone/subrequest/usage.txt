@@ -83,8 +83,8 @@ Relative paths are resolved relative to the parent request's location:
 This takes account of default view's url.
 
     >>> request = traverse('/folder1')
-    >>> request['URL']
-    'http://nohost/folder1/@@test'
+    >>> request['URL'] == 'http://nohost/folder1/@@test'
+    True
     >>> response = subrequest('folder1A/@@url')
     >>> response.getBody()
     'http://nohost/folder1/folder1A'
