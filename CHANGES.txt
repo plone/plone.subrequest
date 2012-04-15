@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.6.5 - unreleased
+1.6.5 (2012-04-15)
 ------------------
 
 - Ensure parent url is a string and not unicode.
