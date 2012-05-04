@@ -6,6 +6,7 @@ from ZPublisher.Publish import dont_publish_class
 from ZPublisher.Publish import missing_name
 from ZPublisher.mapply import mapply
 from cStringIO import StringIO
+from logging import getLogger
 from posixpath import normpath
 from urlparse import urlsplit, urljoin
 from urllib import unquote # Python2.4 does not have urlparse.unquote
@@ -49,6 +50,8 @@ OTHER_IGNORE = set([
     ])
 
 OTHER_IGNORE_RE = re.compile(r'^(?:BASE|URL)\d+$')
+
+logger = getLogger("plone.subrequest")
 
 def subrequest(url, root=None, stdout=None):
     assert url is not None, "You must pass a url"
@@ -124,6 +127,7 @@ def subrequest(url, root=None, stdout=None):
             for key, value in request.response.cookies.items():
                 parent_request.response.cookies[key] = value
         except:
+            logger.exception("Error handling subrequest to %s" % url)
             response.exception()
         return response
     finally:
