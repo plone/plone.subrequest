@@ -1,7 +1,7 @@
 import os.path
 from setuptools import setup, find_packages
 
-version = '1.6.7.dev0'
+version = '1.6.7'
 
 setup(
     name = 'plone.subrequest',

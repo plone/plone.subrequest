@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.6.7 (unreleased)
+1.6.7 (2012-10-22)
 ------------------
 
 - Ensure correct handling of bare virtual hosting urls.
