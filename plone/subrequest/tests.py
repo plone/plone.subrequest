@@ -126,6 +126,13 @@ class IntegrationTests(unittest.TestCase):
         response = subrequest('/folder1B/@@url')
         self.assertEqual(response.body, 'http://example.org/fizz/buzz/fizzbuzz/folder1B')
 
+    def test_virtual_host_with_root_double_slash(self):
+        url = "/VirtualHostBase/http/example.org:80/VirtualHostRoot/_vh_fizz/folder1/folder2//folder2A"
+        traverse(url)
+        root = self.layer['app'].folder1
+        response = subrequest('/folder1B/@@url', root=root)
+        self.assertEqual(response.body, 'http://example.org/fizz/folder1/folder1B')
+
     def test_subrequest_root(self):
         app = self.layer['app']
         response = subrequest('/folder1Ai/@@url', root=app.folder1.folder1A)
