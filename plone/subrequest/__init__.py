@@ -68,7 +68,7 @@ def subrequest(url, root=None, stdout=None):
         if vurl_parts is not None:
             # Use the virtual host root
             path_past_root = unquote(vurl_parts[-1])
-            root_path = parent_request['PATH_INFO'].rstrip('/')[:-len(path_past_root) or None]
+            root_path = normpath(parent_request['PATH_INFO']).rstrip('/')[:-len(path_past_root) or None]
             if root is None:
                 path = root_path + path
             else:
