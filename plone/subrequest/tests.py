@@ -152,6 +152,12 @@ class IntegrationTests(unittest.TestCase):
         self.assertTrue('foo' in response.body)
 
     def test_cookies(self):
+        request = getRequest()
+        request.response.setCookie('cookie_name', 'cookie_value')
+        response = subrequest('/folder1/@@parameter')
+        self.assertTrue("'cookie_name'" in response.body)
+
+    def test_subrequest_cookies(self):
         response = subrequest('/folder1/@@test?url=/folder1/cookie')
         self.assertTrue('cookie_name' in response.cookies)
 

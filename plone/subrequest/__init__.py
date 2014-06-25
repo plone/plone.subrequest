@@ -95,6 +95,8 @@ def subrequest(url, root=None, stdout=None):
         if name in OTHER_IGNORE or OTHER_IGNORE_RE.match(name) or name.startswith('_'):
             continue
         request.other[name] = parent_value
+    for key, value in parent_request.response.cookies.items():
+        request.cookies[key] = value['value']
     request['PARENT_REQUEST'] = parent_request
     alsoProvides(request, ISubRequest)
     try:
