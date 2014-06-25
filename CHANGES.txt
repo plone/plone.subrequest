@@ -1,6 +1,13 @@
 Changelog
 =========
 
+1.6.9 (unreleased)
+------------------
+
+- Fix issue where new cookies from the main request.response are not passed to
+  subrequests.
+  [datakurre]
+
 1.6.8 (unreleased)
 ------------------
 
