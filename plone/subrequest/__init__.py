@@ -1,5 +1,7 @@
 import re
 
+from AccessControl import getSecurityManager
+from AccessControl.SecurityManagement import setSecurityManager
 from Acquisition import aq_base
 from ZPublisher.BaseRequest import RequestContainer
 from ZPublisher.Publish import dont_publish_class
@@ -61,6 +63,7 @@ def subrequest(url, root=None, stdout=None):
     parent_request = getRequest()
     assert parent_request is not None, "Unable to get request, perhaps zope.globalrequest is not configured."
     parent_site = getSite()
+    security_manager = getSecurityManager()
     parent_app = parent_request.PARENTS[-1]
     if path.startswith('/'):
         path = normpath(path)
@@ -134,3 +137,5 @@ def subrequest(url, root=None, stdout=None):
         request.clear()
         setRequest(parent_request)
         setSite(parent_site)
+        setSecurityManager(security_manager)
+
