@@ -8,9 +8,6 @@ Changelog
   subrequests.
   [datakurre]
 
-1.6.8 (unreleased)
-------------------
-
 - Handle sub-requests which contain a doubled // in the path.
   [gweis]
 
