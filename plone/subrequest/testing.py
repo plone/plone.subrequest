@@ -1,9 +1,12 @@
-import OFS.Folder
+# -*- coding: utf-8 -*-
 from Products.Five.browser import BrowserView
 from five.localsitemanager import make_site
 from plone.subrequest import subrequest
-from plone.testing import Layer, z2, zodb, zca
-from zope.globalrequest import getRequest, setRequest
+from plone.testing import Layer
+from plone.testing import z2
+from plone.testing import zca
+from plone.testing import zodb
+from zope.globalrequest import setRequest
 
 
 class CookieView(BrowserView):
@@ -20,7 +23,6 @@ class ParameterView(BrowserView):
         self.keys = self.request.keys()
 
     def __call__(self):
-        response = self.request.response
         return str(self.keys)
 
 
@@ -91,17 +93,23 @@ class BlobStreamIteratorView(BrowserView):
 def singleton(cls):
     return cls()
 
+
 @singleton
 class PLONE_SUBREQEST_FIXTURE(Layer):
     defaultBases = (z2.STARTUP,)
 
     def setUp(self):
         # Stack a new DemoStorage on top of the one from z2.STARTUP.
-        self['zodbDB'] = zodb.stackDemoStorage(self.get('zodbDB'), name='PloneSubRequestFixture')
+        self['zodbDB'] = zodb.stackDemoStorage(
+            self.get('zodbDB'),
+            name='PloneSubRequestFixture'
+        )
 
         # Create a new global registry
         zca.pushGlobalRegistry()
-        self['configurationContext'] = context = zca.stackConfigurationContext(self.get('configurationContext'))
+        self['configurationContext'] = context = zca.stackConfigurationContext(
+            self.get('configurationContext')
+        )
 
         # Load out ZCML
         from zope.configuration import xmlconfig
@@ -111,7 +119,8 @@ class PLONE_SUBREQEST_FIXTURE(Layer):
         with z2.zopeApp() as app:
             # Enable virtual hosting
             z2.installProduct(app, 'Products.SiteAccess')
-            from Products.SiteAccess.VirtualHostMonster import VirtualHostMonster
+            from Products.SiteAccess.VirtualHostMonster import \
+                VirtualHostMonster
             vhm = VirtualHostMonster()
             app._setObject(vhm.getId(), vhm, suppress_events=True)
             # With suppress_events=False, this is called twice...
@@ -149,6 +158,12 @@ class PloneSubrequestLifecycle(z2.IntegrationTesting):
         setRequest(None)
 
 
-INTEGRATION_TESTING = PloneSubrequestLifecycle(bases=(PLONE_SUBREQEST_FIXTURE,), name="PloneSubrequest:Integration")
-FUNCTIONAL_TESTING = z2.FunctionalTesting(bases=(PLONE_SUBREQEST_FIXTURE,), name="PloneSubrequest:Functional")
+INTEGRATION_TESTING = PloneSubrequestLifecycle(
+    bases=(PLONE_SUBREQEST_FIXTURE,),
+    name="PloneSubrequest:Integration"
+)
+FUNCTIONAL_TESTING = z2.FunctionalTesting(
+    bases=(PLONE_SUBREQEST_FIXTURE,),
+    name="PloneSubrequest:Functional"
+)
 

@@ -1,9 +1,23 @@
 Changelog
 =========
 
-1.6.8 (unreleased)
+1.6.9 (unreleased)
 ------------------
 
+- Workaround for broken test because of missing dependency declaration in 
+  upstream package, see https://github.com/plone/plone.app.blob/issues/19
+  for details.
+  [jensens]
+
+- Housekeeping and code cleanup (pep8, et al).
+  [jensens]
+
+- Fix issue where new cookies from the main request.response are not passed to
+  subrequests.
+  [datakurre]
+
+1.6.8 (2014-03-04)
+------------------
 - Handle sub-requests which contain a doubled // in the path.
   [gweis]
 

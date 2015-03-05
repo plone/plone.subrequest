@@ -1,15 +1,15 @@
 import os.path
 from setuptools import setup, find_packages
 
-version = '1.6.8.dev0'
+version = '1.6.9.dev0'
 
 setup(
-    name = 'plone.subrequest',
-    version = version,
-    description = 'Subrequests for Zope2',
-    long_description=open("README.txt").read() + "\n\n" +
+    name='plone.subrequest',
+    version=version,
+    description='Subrequests for Zope2',
+    long_description=open("README.rst").read() + "\n\n" +
         open(os.path.join('plone', 'subrequest', 'usage.txt')).read() + "\n\n" +
-        open("CHANGES.txt").read(),
+        open("CHANGES.rst").read(),
     classifiers=[
         "Environment :: Web Environment",
         "Framework :: Plone",
@@ -41,6 +41,9 @@ setup(
             'manuel',
             'plone.testing [z2]',
             'plone.app.blob',
+
+            # see https://github.com/plone/plone.app.blob/issues/19
+            'Products.MimetypesRegistry',
             ],
         },
     entry_points="""
