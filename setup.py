@@ -7,9 +7,9 @@ setup(
     name = 'plone.subrequest',
     version = version,
     description = 'Subrequests for Zope2',
-    long_description=open("README.txt").read() + "\n\n" +
+    long_description=open("README.rst").read() + "\n\n" +
         open(os.path.join('plone', 'subrequest', 'usage.txt')).read() + "\n\n" +
-        open("CHANGES.txt").read(),
+        open("CHANGES.rst").read(),
     classifiers=[
         "Environment :: Web Environment",
         "Framework :: Plone",
