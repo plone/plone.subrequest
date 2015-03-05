@@ -4,9 +4,9 @@ from setuptools import setup, find_packages
 version = '1.6.9.dev0'
 
 setup(
-    name = 'plone.subrequest',
-    version = version,
-    description = 'Subrequests for Zope2',
+    name='plone.subrequest',
+    version=version,
+    description='Subrequests for Zope2',
     long_description=open("README.rst").read() + "\n\n" +
         open(os.path.join('plone', 'subrequest', 'usage.txt')).read() + "\n\n" +
         open("CHANGES.rst").read(),

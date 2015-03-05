@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from ZPublisher.HTTPResponse import HTTPResponse
 from ZPublisher.Iterators import IStreamIterator
 try:
@@ -5,6 +6,7 @@ try:
 except ImportError:
     class BlobStreamIterator:
         pass
+
 
 class SubResponse(HTTPResponse):
 
@@ -14,8 +16,10 @@ class SubResponse(HTTPResponse):
             return HTTPResponse.setBody(self, body, title, is_error, **kw)
         assert not self._wrote
         if isinstance(body, BlobStreamIterator):
-            body = body.blob # A BlobFile
-        if hasattr(body, 'seek') and hasattr(body, 'read') and hasattr(body, 'close'):
+            body = body.blob  # A BlobFile
+        if hasattr(body, 'seek') \
+           and hasattr(body, 'read') and \
+           hasattr(body, 'close'):
             self.stdout = body
             self._wrote = 1
             return
