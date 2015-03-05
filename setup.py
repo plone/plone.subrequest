@@ -41,6 +41,9 @@ setup(
             'manuel',
             'plone.testing [z2]',
             'plone.app.blob',
+
+            # see https://github.com/plone/plone.app.blob/issues/19
+            'Products.MimetypesRegistry',
             ],
         },
     entry_points="""

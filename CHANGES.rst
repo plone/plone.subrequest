@@ -4,6 +4,14 @@ Changelog
 1.6.9 (unreleased)
 ------------------
 
+- Workaround for broken test because of missing dependency declaration in 
+  upstream package, see https://github.com/plone/plone.app.blob/issues/19
+  for details.
+  [jensens]
+
+- Housekeeping and code cleanup (pep8, et al).
+  [jensens]
+
 - Fix issue where new cookies from the main request.response are not passed to
   subrequests.
   [datakurre]
