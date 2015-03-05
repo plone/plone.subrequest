@@ -1,13 +1,15 @@
 Changelog
 =========
 
-1.6.8 (unreleased)
+1.6.9 (unreleased)
 ------------------
 
 - Fix issue where new cookies from the main request.response are not passed to
   subrequests.
   [datakurre]
 
+1.6.8 (2014-03-04)
+------------------
 - Handle sub-requests which contain a doubled // in the path.
   [gweis]
 
