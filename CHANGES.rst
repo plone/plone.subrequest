@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.6.9 (unreleased)
+1.6.9 (2015-03-21)
 ------------------
 
 - Workaround for broken test because of missing dependency declaration in 
