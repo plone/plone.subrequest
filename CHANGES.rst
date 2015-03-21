@@ -16,6 +16,10 @@ Changelog
   subrequests.
   [datakurre]
 
+- normalise request path_info so that string indexing works properly.
+  [gweiss]
+
+  
 1.6.8 (2014-03-04)
 ------------------
 - Handle sub-requests which contain a doubled // in the path.
