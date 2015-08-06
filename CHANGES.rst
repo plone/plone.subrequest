@@ -4,7 +4,8 @@ Changelog
 1.6.10 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- propagate registered safe writes from plone.protect to parent request object.
+  [vangheem]
 
 
 1.6.9 (2015-03-21)

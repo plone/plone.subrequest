@@ -22,6 +22,11 @@ try:
 except ImportError:
     from zope.app.component.hooks import getSite, setSite
 
+try:
+    from plone.protect.auto import SAFE_WRITE_KEY
+except ImportError:
+    SAFE_WRITE_KEY = 'plone.protect.safe_oids'
+
 
 __all__ = ['subrequest', 'SubResponse']
 
@@ -143,6 +148,12 @@ def subrequest(url, root=None, stdout=None):
             response.exception()
         return response
     finally:
+        if SAFE_WRITE_KEY in request.environ:
+            # append this list of safe oids to parent request
+            if SAFE_WRITE_KEY not in parent_request.environ:
+                parent_request.environ[SAFE_WRITE_KEY] = []
+            parent_request.environ[SAFE_WRITE_KEY].extend(
+                request.environ[SAFE_WRITE_KEY])
         request.clear()
         setRequest(parent_request)
         setSite(parent_site)
