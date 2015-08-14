@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.6.10 (unreleased)
+1.6.10 (2015-08-14)
 -------------------
 
 - propagate registered safe writes from plone.protect to parent request object.
