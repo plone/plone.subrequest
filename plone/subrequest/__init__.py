@@ -24,8 +24,12 @@ except ImportError:
 
 try:
     from plone.protect.auto import SAFE_WRITE_KEY
+    from plone.protect.interfaces import IDisableCSRFProtection
 except ImportError:
     SAFE_WRITE_KEY = 'plone.protect.safe_oids'
+    from zope.interface import Interface
+    class IDisableCSRFProtection(Interface):
+        pass
 
 
 __all__ = ['subrequest', 'SubResponse']
@@ -154,6 +158,8 @@ def subrequest(url, root=None, stdout=None):
                 parent_request.environ[SAFE_WRITE_KEY] = []
             parent_request.environ[SAFE_WRITE_KEY].extend(
                 request.environ[SAFE_WRITE_KEY])
+        if IDisableCSRFProtection.providedBy(request):
+            alsoProvides(parent_request, IDisableCSRFProtection)
         request.clear()
         setRequest(parent_request)
         setSite(parent_site)
