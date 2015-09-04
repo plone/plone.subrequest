@@ -4,7 +4,8 @@ Changelog
 1.6.11 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- propagate IDisableCSRFProtection interface on subrequest to parent request object
+  [vangheem]
 
 
 1.6.10 (2015-08-14)
