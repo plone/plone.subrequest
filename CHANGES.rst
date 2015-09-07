@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.6.11 (unreleased)
+1.6.11 (2015-09-07)
 -------------------
 
 - propagate IDisableCSRFProtection interface on subrequest to parent request object
