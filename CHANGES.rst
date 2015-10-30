@@ -4,7 +4,13 @@ Changelog
 1.6.12 (unreleased)
 -------------------
 
-- Nothing changed yet.
+New:
+
+- *add item here*
+
+Fixes:
+
+- *add item here*
 
 
 1.6.11 (2015-09-07)
@@ -24,7 +30,7 @@ Changelog
 1.6.9 (2015-03-21)
 ------------------
 
-- Workaround for broken test because of missing dependency declaration in 
+- Workaround for broken test because of missing dependency declaration in
   upstream package, see https://github.com/plone/plone.app.blob/issues/19
   for details.
   [jensens]
@@ -39,7 +45,7 @@ Changelog
 - normalise request path_info so that string indexing works properly.
   [gweiss]
 
-  
+
 1.6.8 (2014-03-04)
 ------------------
 - Handle sub-requests which contain a doubled // in the path.
