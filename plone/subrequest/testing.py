@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-from Products.Five.browser import BrowserView
 from five.localsitemanager import make_site
 from plone.subrequest import subrequest
 from plone.testing import Layer
 from plone.testing import z2
 from plone.testing import zca
 from plone.testing import zodb
+from Products.Five.browser import BrowserView
 from zope.globalrequest import setRequest
 
 
@@ -166,4 +166,3 @@ FUNCTIONAL_TESTING = z2.FunctionalTesting(
     bases=(PLONE_SUBREQEST_FIXTURE,),
     name="PloneSubrequest:Functional"
 )
-

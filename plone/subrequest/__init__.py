@@ -2,20 +2,24 @@
 from AccessControl import getSecurityManager
 from AccessControl.SecurityManagement import setSecurityManager
 from Acquisition import aq_base
-from ZPublisher.BaseRequest import RequestContainer
-from ZPublisher.Publish import dont_publish_class
-from ZPublisher.Publish import missing_name
-from ZPublisher.mapply import mapply
 from cStringIO import StringIO
 from logging import getLogger
 from plone.subrequest.interfaces import ISubRequest
 from plone.subrequest.subresponse import SubResponse
 from posixpath import normpath
 from urllib import unquote  # Python2.4 does not have urlparse.unquote
-from urlparse import urlsplit, urljoin
-from zope.globalrequest import getRequest, setRequest
+from urlparse import urljoin
+from urlparse import urlsplit
+from zope.globalrequest import getRequest
+from zope.globalrequest import setRequest
 from zope.interface import alsoProvides
+from ZPublisher.BaseRequest import RequestContainer
+from ZPublisher.mapply import mapply
+from ZPublisher.Publish import dont_publish_class
+from ZPublisher.Publish import missing_name
+
 import re
+
 
 try:
     from zope.site.hooks import getSite, setSite
