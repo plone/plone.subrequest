@@ -27,6 +27,7 @@ class ParameterView(BrowserView):
 
 
 class URLView(BrowserView):
+
     def __call__(self):
         url = self.context.absolute_url()
         # The absolute url is expected to be an encoded string, not unicode.
@@ -35,6 +36,7 @@ class URLView(BrowserView):
 
 
 class ResponseWriteView(BrowserView):
+
     def __call__(self):
         response = self.request.response
         response.write('Some data.\n')
@@ -42,16 +44,19 @@ class ResponseWriteView(BrowserView):
 
 
 class ErrorView(BrowserView):
+
     def __call__(self):
         raise Exception('An error')
 
 
 class RootView(BrowserView):
+
     def __call__(self):
         return 'Root: %s' % self.context.absolute_url()
 
 
 class SubrequestView(BrowserView):
+
     def __call__(self):
         url = self.request.form.get('url')
         if url is None:
@@ -147,6 +152,7 @@ class PLONE_SUBREQEST_FIXTURE(Layer):
 
 
 class PloneSubrequestLifecycle(z2.IntegrationTesting):
+
     def testSetUp(self):
         super(PloneSubrequestLifecycle, self).testSetUp()
         request = self['request']

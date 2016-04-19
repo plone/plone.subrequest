@@ -32,6 +32,7 @@ try:
 except ImportError:
     SAFE_WRITE_KEY = 'plone.protect.safe_oids'
     from zope.interface import Interface
+
     class IDisableCSRFProtection(Interface):
         pass
 
@@ -46,7 +47,7 @@ CONDITIONAL_HEADERS = [
     'HTTP_IF_NONE_MATCH',
     'HTTP_IF_RANGE',
     'HTTP_RANGE',  # Not strictly a conditional header, but scrub it anyway
-    ]
+]
 
 OTHER_IGNORE = set([
     'ACTUAL_URL',
@@ -63,7 +64,7 @@ OTHER_IGNORE = set([
     'VirtualRootPhysicalPath',
     'method',
     'traverse_subpath',
-    ])
+])
 
 OTHER_IGNORE_RE = re.compile(r'^(?:BASE|URL)\d+$')
 
