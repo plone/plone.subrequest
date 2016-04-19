@@ -10,7 +10,12 @@ New:
 
 Fixes:
 
-- *add item here*
+- When a subrequest modified the DB (or prior to the subrequest the main request),
+  the oids annotated to the requests were doubled with each subsequent subrequest.
+  This resulted in out-of-memory errors when using lots of subrequests,
+  such as it happens on Mosaic based sites with a certain amount of tiles.
+  Fixed by only adding new oids, not already known by parent request.
+  [jensens]
 
 
 1.6.11 (2015-09-07)

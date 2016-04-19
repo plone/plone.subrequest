@@ -156,8 +156,11 @@ def subrequest(url, root=None, stdout=None):
             # append this list of safe oids to parent request
             if SAFE_WRITE_KEY not in parent_request.environ:
                 parent_request.environ[SAFE_WRITE_KEY] = []
-            parent_request.environ[SAFE_WRITE_KEY].extend(
-                request.environ[SAFE_WRITE_KEY])
+            new_keys = (
+                set(request.environ[SAFE_WRITE_KEY]) -
+                set(parent_request.environ[SAFE_WRITE_KEY])
+            )
+            parent_request.environ[SAFE_WRITE_KEY].extend(new_keys)
         if IDisableCSRFProtection.providedBy(request):
             alsoProvides(parent_request, IDisableCSRFProtection)
         request.clear()
