@@ -52,7 +52,7 @@ class ErrorView(BrowserView):
 class RootView(BrowserView):
 
     def __call__(self):
-        return 'Root: %s' % self.context.absolute_url()
+        return 'Root: {0}'.format(self.context.absolute_url())
 
 
 class SubrequestView(BrowserView):
@@ -89,9 +89,8 @@ class BlobStreamIteratorView(BrowserView):
         from ZODB.blob import Blob
         from plone.app.blob.iterators import BlobStreamIterator
         myblob = Blob()
-        f = myblob.open("w")
-        f.write("Hi, Blob!")
-        f.close()
+        with myblob.open('w') as fd:
+            fd.write('Hi, Blob!')
         return BlobStreamIterator(myblob)
 
 
@@ -166,9 +165,9 @@ class PloneSubrequestLifecycle(z2.IntegrationTesting):
 
 INTEGRATION_TESTING = PloneSubrequestLifecycle(
     bases=(PLONE_SUBREQEST_FIXTURE,),
-    name="PloneSubrequest:Integration"
+    name='PloneSubrequest:Integration'
 )
 FUNCTIONAL_TESTING = z2.FunctionalTesting(
     bases=(PLONE_SUBREQEST_FIXTURE,),
-    name="PloneSubrequest:Functional"
+    name='PloneSubrequest:Functional'
 )

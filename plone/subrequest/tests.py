@@ -20,8 +20,8 @@ def traverse(url):
     return request
 
 VH_TPL = (
-    "/VirtualHostBase/http/example.org:80/%s/VirtualHostRoot"
-    "/_vh_fizz/_vh_buzz/_vh_fizzbuzz/%s"
+    '/VirtualHostBase/http/example.org:80/{0}/VirtualHostRoot'
+    '/_vh_fizz/_vh_buzz/_vh_fizzbuzz/{1}'
 )
 NOHOST_VH_TPL = 'http://nohost' + VH_TPL
 
@@ -39,24 +39,24 @@ class FunctionalTests(unittest.TestCase):
     def test_virtual_hosting(self):
         parts = ('folder1', 'folder1A/@@url')
         expect = 'folder1A'
-        url = NOHOST_VH_TPL % parts
-        expect_url = 'http://example.org/fizz/buzz/fizzbuzz/%s' % expect
+        url = NOHOST_VH_TPL.format(*parts)
+        expect_url = 'http://example.org/fizz/buzz/fizzbuzz/{0}'.format(expect)
         self.browser.open(url)
         self.assertEqual(self.browser.contents, expect_url)
 
     def test_virtual_hosting_relative(self):
         parts = ('folder1', 'folder1A?url=folder1Ai/@@url')
         expect = 'folder1A/folder1Ai'
-        url = NOHOST_VH_TPL % parts
-        expect_url = 'http://example.org/fizz/buzz/fizzbuzz/%s' % expect
+        url = NOHOST_VH_TPL.format(*parts)
+        expect_url = 'http://example.org/fizz/buzz/fizzbuzz/{0}'.format(expect)
         self.browser.open(url)
         self.assertEqual(self.browser.contents, expect_url)
 
     def test_virtual_hosting_absolute(self):
         parts = ('folder1', 'folder1A?url=/folder1B/@@url')
         expect = 'folder1B'
-        url = NOHOST_VH_TPL % parts
-        expect_url = 'http://example.org/fizz/buzz/fizzbuzz/%s' % expect
+        url = NOHOST_VH_TPL.format(*parts)
+        expect_url = 'http://example.org/fizz/buzz/fizzbuzz/{0}'.format(expect)
         self.browser.open(url)
         self.assertEqual(self.browser.contents, expect_url)
 
@@ -94,7 +94,7 @@ class IntegrationTests(unittest.TestCase):
         )
 
     def test_virtual_hosting(self):
-        url = VH_TPL % ('folder1', 'folder1A/@@url')
+        url = VH_TPL.format('folder1', 'folder1A/@@url')
         response = subrequest(url)
         self.assertEqual(
             response.body,
@@ -102,7 +102,7 @@ class IntegrationTests(unittest.TestCase):
         )
 
     def test_virtual_hosting_unicode(self):
-        url = VH_TPL % ('folder1', 'folder1A/@@url')
+        url = VH_TPL.format('folder1', 'folder1A/@@url')
         response = subrequest(url)
         self.assertEqual(
             response.body,
@@ -110,7 +110,7 @@ class IntegrationTests(unittest.TestCase):
         )
 
     def test_virtual_hosting_relative(self):
-        url = VH_TPL % ('folder1', 'folder1A?url=folder1B/@@url')
+        url = VH_TPL.format('folder1', 'folder1A?url=folder1B/@@url')
         response = subrequest(url)
         self.assertEqual(
             response.body,
@@ -123,7 +123,7 @@ class IntegrationTests(unittest.TestCase):
 
     def test_virtual_host_root(self):
         parts = ('folder1', 'folder1A/@@url')
-        url = VH_TPL % parts
+        url = VH_TPL.format(*parts)
         traverse(url)
         response = subrequest('/folder1B/@@url')
         self.assertEqual(
@@ -133,7 +133,7 @@ class IntegrationTests(unittest.TestCase):
 
     def test_virtual_host_root_with_root(self):
         parts = ('folder1', 'folder1A/@@url')
-        url = VH_TPL % parts
+        url = VH_TPL.format(*parts)
         traverse(url)
         app = self.layer['app']
         response = subrequest('/folder1Ai/@@url', root=app.folder1.folder1A)
@@ -145,8 +145,8 @@ class IntegrationTests(unittest.TestCase):
     def test_virtual_host_space(self):
         parts = ('folder2', 'folder2A/folder2Ai space/@@url')
         url = (
-            "/VirtualHostBase/http/example.org:80/%s/VirtualHostRoot/%s" %
-            parts
+            '/VirtualHostBase/http/example.org:80/'
+            '{0}/VirtualHostRoot/{1}'.format(*parts)
         )
         traverse(url)
         app = self.layer['app']
@@ -158,8 +158,8 @@ class IntegrationTests(unittest.TestCase):
 
     def test_virtual_host_root_at_root(self):
         url = (
-            "/VirtualHostBase/http/example.org:80/folder1/VirtualHostRoot/"
-            "_vh_fizz/_vh_buzz/_vh_fizzbuzz"
+            '/VirtualHostBase/http/example.org:80/folder1/VirtualHostRoot/'
+            '_vh_fizz/_vh_buzz/_vh_fizzbuzz'
         )
         traverse(url)
         response = subrequest('/folder1B/@@url')
@@ -170,8 +170,8 @@ class IntegrationTests(unittest.TestCase):
 
     def test_virtual_host_root_at_root_trailing(self):
         url = (
-            "/VirtualHostBase/http/example.org:80/folder1/VirtualHostRoot/"
-            "_vh_fizz/_vh_buzz/_vh_fizzbuzz/"
+            '/VirtualHostBase/http/example.org:80/folder1/VirtualHostRoot/'
+            '_vh_fizz/_vh_buzz/_vh_fizzbuzz/'
         )
         traverse(url)
         response = subrequest('/folder1B/@@url')
@@ -182,8 +182,8 @@ class IntegrationTests(unittest.TestCase):
 
     def test_virtual_host_with_root_double_slash(self):
         url = (
-            "/VirtualHostBase/http/example.org:80/VirtualHostRoot/"
-            "_vh_fizz/folder1/folder2//folder2A"
+            '/VirtualHostBase/http/example.org:80/VirtualHostRoot/'
+            '_vh_fizz/folder1/folder2//folder2A'
         )
         traverse(url)
         root = self.layer['app'].folder1
@@ -229,7 +229,7 @@ class IntegrationTests(unittest.TestCase):
         request = getRequest()
         request.response.__class__ = ZServerHTTPResponse
         response = subrequest('/@@stream')
-        self.assertEqual(response.getBody(), "hello")
+        self.assertEqual(response.getBody(), 'hello')
 
     def test_filestream_iterator(self):
         # Only a ZServerHTTPResponse is IStreamIterator Aware
@@ -239,7 +239,7 @@ class IntegrationTests(unittest.TestCase):
         response = subrequest('/@@filestream')
         from ZPublisher.Iterators import filestream_iterator
         self.assertTrue(isinstance(response.stdout, filestream_iterator))
-        self.assertEqual(response.getBody(), "Test")
+        self.assertEqual(response.getBody(), 'Test')
 
     def test_blobstream_iterator(self):
         # Only a ZServerHTTPResponse is IStreamIterator Aware
@@ -249,7 +249,7 @@ class IntegrationTests(unittest.TestCase):
         response = subrequest('/@@blobstream')
         from ZODB.blob import BlobFile
         self.assertTrue(isinstance(response.stdout, BlobFile))
-        self.assertEqual(response.getBody(), "Hi, Blob!")
+        self.assertEqual(response.getBody(), 'Hi, Blob!')
 
     def test_other_variables(self):
         request = getRequest()
