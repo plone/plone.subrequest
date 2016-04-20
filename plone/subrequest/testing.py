@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-from Products.Five.browser import BrowserView
 from five.localsitemanager import make_site
 from plone.subrequest import subrequest
 from plone.testing import Layer
 from plone.testing import z2
 from plone.testing import zca
 from plone.testing import zodb
+from Products.Five.browser import BrowserView
 from zope.globalrequest import setRequest
 
 
@@ -27,6 +27,7 @@ class ParameterView(BrowserView):
 
 
 class URLView(BrowserView):
+
     def __call__(self):
         url = self.context.absolute_url()
         # The absolute url is expected to be an encoded string, not unicode.
@@ -35,6 +36,7 @@ class URLView(BrowserView):
 
 
 class ResponseWriteView(BrowserView):
+
     def __call__(self):
         response = self.request.response
         response.write('Some data.\n')
@@ -42,16 +44,19 @@ class ResponseWriteView(BrowserView):
 
 
 class ErrorView(BrowserView):
+
     def __call__(self):
         raise Exception('An error')
 
 
 class RootView(BrowserView):
+
     def __call__(self):
-        return 'Root: %s' % self.context.absolute_url()
+        return 'Root: {0}'.format(self.context.absolute_url())
 
 
 class SubrequestView(BrowserView):
+
     def __call__(self):
         url = self.request.form.get('url')
         if url is None:
@@ -84,9 +89,8 @@ class BlobStreamIteratorView(BrowserView):
         from ZODB.blob import Blob
         from plone.app.blob.iterators import BlobStreamIterator
         myblob = Blob()
-        f = myblob.open("w")
-        f.write("Hi, Blob!")
-        f.close()
+        with myblob.open('w') as fd:
+            fd.write('Hi, Blob!')
         return BlobStreamIterator(myblob)
 
 
@@ -147,6 +151,7 @@ class PLONE_SUBREQEST_FIXTURE(Layer):
 
 
 class PloneSubrequestLifecycle(z2.IntegrationTesting):
+
     def testSetUp(self):
         super(PloneSubrequestLifecycle, self).testSetUp()
         request = self['request']
@@ -160,10 +165,9 @@ class PloneSubrequestLifecycle(z2.IntegrationTesting):
 
 INTEGRATION_TESTING = PloneSubrequestLifecycle(
     bases=(PLONE_SUBREQEST_FIXTURE,),
-    name="PloneSubrequest:Integration"
+    name='PloneSubrequest:Integration'
 )
 FUNCTIONAL_TESTING = z2.FunctionalTesting(
     bases=(PLONE_SUBREQEST_FIXTURE,),
-    name="PloneSubrequest:Functional"
+    name='PloneSubrequest:Functional'
 )
-

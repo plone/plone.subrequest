@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from ZPublisher.HTTPResponse import HTTPResponse
 from ZPublisher.Iterators import IStreamIterator
+
+
 try:
     from plone.app.blob.iterators import BlobStreamIterator
 except ImportError:

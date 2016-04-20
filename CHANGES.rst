@@ -17,6 +17,9 @@ Fixes:
   Fixed by only adding new oids, not already known by parent request.
   [jensens]
 
+- Housekeeping: isort imports, autopep8, minor manual cleanup (no zope.app. imports). 
+  [jensens]
+
 
 1.6.11 (2015-09-07)
 -------------------

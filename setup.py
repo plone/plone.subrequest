@@ -1,5 +1,9 @@
+# -*- coding: utf-8 -*-
+from setuptools import find_packages
+from setuptools import setup
+
 import os.path
-from setuptools import setup, find_packages
+
 
 version = '1.6.12.dev0'
 
@@ -56,4 +60,4 @@ setup(
     [z3c.autoinclude.plugin]
     target = plone
     """,
-    )
+)

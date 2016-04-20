@@ -2,25 +2,26 @@
 from AccessControl import getSecurityManager
 from AccessControl.SecurityManagement import setSecurityManager
 from Acquisition import aq_base
-from ZPublisher.BaseRequest import RequestContainer
-from ZPublisher.Publish import dont_publish_class
-from ZPublisher.Publish import missing_name
-from ZPublisher.mapply import mapply
 from cStringIO import StringIO
 from logging import getLogger
 from plone.subrequest.interfaces import ISubRequest
 from plone.subrequest.subresponse import SubResponse
 from posixpath import normpath
 from urllib import unquote  # Python2.4 does not have urlparse.unquote
-from urlparse import urlsplit, urljoin
-from zope.globalrequest import getRequest, setRequest
+from urlparse import urljoin
+from urlparse import urlsplit
+from zope.globalrequest import getRequest
+from zope.globalrequest import setRequest
 from zope.interface import alsoProvides
+from zope.site.hooks import getSite
+from zope.site.hooks import setSite
+from ZPublisher.BaseRequest import RequestContainer
+from ZPublisher.mapply import mapply
+from ZPublisher.Publish import dont_publish_class
+from ZPublisher.Publish import missing_name
+
 import re
 
-try:
-    from zope.site.hooks import getSite, setSite
-except ImportError:
-    from zope.app.component.hooks import getSite, setSite
 
 try:
     from plone.protect.auto import SAFE_WRITE_KEY
@@ -28,6 +29,7 @@ try:
 except ImportError:
     SAFE_WRITE_KEY = 'plone.protect.safe_oids'
     from zope.interface import Interface
+
     class IDisableCSRFProtection(Interface):
         pass
 
@@ -42,7 +44,7 @@ CONDITIONAL_HEADERS = [
     'HTTP_IF_NONE_MATCH',
     'HTTP_IF_RANGE',
     'HTTP_RANGE',  # Not strictly a conditional header, but scrub it anyway
-    ]
+]
 
 OTHER_IGNORE = set([
     'ACTUAL_URL',
@@ -59,21 +61,21 @@ OTHER_IGNORE = set([
     'VirtualRootPhysicalPath',
     'method',
     'traverse_subpath',
-    ])
+])
 
 OTHER_IGNORE_RE = re.compile(r'^(?:BASE|URL)\d+$')
 
-logger = getLogger("plone.subrequest")
+logger = getLogger('plone.subrequest')
 
 
 def subrequest(url, root=None, stdout=None):
-    assert url is not None, "You must pass a url"
+    assert url is not None, 'You must pass a url'
     if isinstance(url, unicode):
         url = url.encode('utf-8')
     _, _, path, query, _ = urlsplit(url)
     parent_request = getRequest()
     assert parent_request is not None, \
-        "Unable to get request, perhaps zope.globalrequest is not configured."
+        'Unable to get request, perhaps zope.globalrequest is not configured.'
     parent_site = getSite()
     security_manager = getSecurityManager()
     parent_app = parent_request.PARENTS[-1]
@@ -89,9 +91,13 @@ def subrequest(url, root=None, stdout=None):
             if root is None:
                 path = root_path + path
             else:
-                path = '%s/%s%s' % (root_path, root.virtual_url_path(), path)
+                path = '{0}/{1}{2}'.format(
+                    root_path,
+                    root.virtual_url_path(),
+                    path
+                )
         elif root is not None:
-            path = '/%s%s' % (root.virtual_url_path(), path)
+            path = '/{0}{1}'.format(root.virtual_url_path(), path)
     else:
         try:
             parent_url = parent_request['URL']
@@ -135,20 +141,23 @@ def subrequest(url, root=None, stdout=None):
         try:
             request.processInputs()
             traversed = request.traverse(path)
-            result = mapply(traversed, positional=request.args,
-                            keyword=request,
-                            debug=None,
-                            maybe=1,
-                            missing_name=missing_name,
-                            handle_class=dont_publish_class,
-                            context=request,
-                            bind=1)
+            result = mapply(
+                traversed,
+                positional=request.args,
+                keyword=request,
+                debug=None,
+                maybe=1,
+                missing_name=missing_name,
+                handle_class=dont_publish_class,
+                context=request,
+                bind=1
+            )
             if result is not response:
                 response.setBody(result)
             for key, value in request.response.cookies.items():
                 parent_request.response.cookies[key] = value
-        except:
-            logger.exception("Error handling subrequest to %s" % url)
+        except Exception:
+            logger.exception('Error handling subrequest to {0}'.format(url))
             response.exception()
         return response
     finally:
