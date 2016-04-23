@@ -68,7 +68,7 @@ OTHER_IGNORE_RE = re.compile(r'^(?:BASE|URL)\d+$')
 logger = getLogger('plone.subrequest')
 
 
-def subrequest(url, root=None, stdout=None):
+def subrequest(url, root=None, stdout=None, exception_handler=None):
     assert url is not None, 'You must pass a url'
     if isinstance(url, unicode):
         url = url.encode('utf-8')
@@ -156,9 +156,12 @@ def subrequest(url, root=None, stdout=None):
                 response.setBody(result)
             for key, value in request.response.cookies.items():
                 parent_request.response.cookies[key] = value
-        except Exception:
+        except Exception, e:
             logger.exception('Error handling subrequest to {0}'.format(url))
-            response.exception()
+            if exception_handler is not None:
+                exception_handler(response, e)
+            else:
+                response.exception()
         return response
     finally:
         if SAFE_WRITE_KEY in request.environ:
