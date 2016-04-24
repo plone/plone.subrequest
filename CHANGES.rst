@@ -1,12 +1,13 @@
 Changelog
 =========
 
-1.6.12 (unreleased)
--------------------
+1.7.0 (unreleased)
+------------------
 
 New:
 
-- *add item here*
+- Allow to pass a custom exception handler for the response.
+  [jensens]
 
 Fixes:
 
