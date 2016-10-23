@@ -19,6 +19,7 @@ def traverse(url):
     request['PATH_INFO'] = url
     return request
 
+
 VH_TPL = (
     '/VirtualHostBase/http/example.org:80/{0}/VirtualHostRoot'
     '/_vh_fizz/_vh_buzz/_vh_fizzbuzz/{1}'

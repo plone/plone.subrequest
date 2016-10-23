@@ -10,7 +10,8 @@ Breaking changes:
 
 New features:
 
-- *add item here*
+- Provide an exception-handler for rewriting Unauthorized to 401's.
+  [jensens]
 
 Bug fixes:
 
