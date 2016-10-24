@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from AccessControl import getSecurityManager
+from AccessControl import Unauthorized
 from AccessControl.SecurityManagement import setSecurityManager
 from Acquisition import aq_base
 from cStringIO import StringIO
@@ -179,3 +180,12 @@ def subrequest(url, root=None, stdout=None, exception_handler=None):
         setRequest(parent_request)
         setSite(parent_site)
         setSecurityManager(security_manager)
+
+
+def unauthorized_exception_handler(response, exception):
+    """exception handler for subrequests delegating Unauthorized to a 401,
+    but raising all other exceptions (resulting later in a 500).
+    """
+    if not isinstance(exception, Unauthorized):
+        return response.exception()
+    response.setStatus = 401
