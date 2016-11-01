@@ -4,18 +4,10 @@ Changelog
 1.8 (unreleased)
 ----------------
 
-Breaking changes:
-
-- *add item here*
-
 New features:
 
 - Provide an exception-handler for rewriting Unauthorized to 401's.
   [jensens]
-
-Bug fixes:
-
-- *add item here*
 
 
 1.7.0 (2016-05-04)
