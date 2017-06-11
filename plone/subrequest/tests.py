@@ -9,7 +9,7 @@ from zope.site.hooks import getSite
 import manuel.doctest
 import manuel.testcase
 import manuel.testing
-import unittest2 as unittest
+import unittest
 
 
 def traverse(url):
