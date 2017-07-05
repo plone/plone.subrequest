@@ -14,7 +14,8 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Remove vurl-parts from path
+  [awello]
 
 
 1.8.1 (2017-06-28)
