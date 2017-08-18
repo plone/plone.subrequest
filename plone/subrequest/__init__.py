@@ -89,7 +89,6 @@ def subrequest(url, root=None, stdout=None, exception_handler=None):
             root_path = normpath(
                 parent_request['PATH_INFO']
             ).rstrip('/')[:-len(path_past_root) or None]
-            path = path.replace(vurl_parts[1], '', 1)
             if root is None:
                 path = root_path + path
             else:
