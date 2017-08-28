@@ -10,11 +10,15 @@ Breaking changes:
 
 New features:
 
-- *add item here*
+- Add support for Zope exception views when explicit exception handler
+  is not defined
+  [datakurre]
 
 Bug fixes:
 
-- *add item here*
+- Fix issue where the example unauthorized_exception_handler did
+  not properly set response status code
+  [datakurre]
 
 
 1.8.2 (2017-07-20)
