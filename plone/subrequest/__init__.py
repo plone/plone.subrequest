@@ -188,4 +188,4 @@ def unauthorized_exception_handler(response, exception):
     """
     if not isinstance(exception, Unauthorized):
         return response.exception()
-    response.setStatus = 401
+    response.setStatus(401)
