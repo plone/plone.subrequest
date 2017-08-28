@@ -9,6 +9,16 @@ from Products.Five.browser import BrowserView
 from zope.globalrequest import setRequest
 
 
+class CustomException(Exception):
+    """Custom exception"""
+
+
+class CustomExceptionHandler(BrowserView):
+    def __call__(self):
+        self.request.response.setStatus(500)
+        return "Custom exception occurred: {0:s}".format(self.context)
+
+
 class CookieView(BrowserView):
 
     def __call__(self):
@@ -47,6 +57,12 @@ class ErrorView(BrowserView):
 
     def __call__(self):
         raise Exception('An error')
+
+
+class CustomErrorView(BrowserView):
+
+    def __call__(self):
+        raise CustomException('A custom error')
 
 
 class RootView(BrowserView):

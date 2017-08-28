@@ -84,4 +84,18 @@
         name="root"
         />
 
+    <browser:page
+        name="custom-error"
+        for="*"
+        class="plone.subrequest.testing.CustomErrorView"
+        permission="zope.Public"
+        />
+
+    <browser:page
+        name="index.html"
+        for="plone.subrequest.testing.CustomException"
+        class="plone.subrequest.testing.CustomExceptionHandler"
+        permission="zope.Public"
+        />
+
 </configure>
