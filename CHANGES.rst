@@ -14,7 +14,8 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Reverted "Remove vurl-parts from path", which resulted in broken p.a.mosaic pages
+  [thet]
 
 
 1.8.2 (2017-07-20)
@@ -61,7 +62,7 @@ Fixes:
   Fixed by only adding new oids, not already known by parent request.
   [jensens]
 
-- Housekeeping: isort imports, autopep8, minor manual cleanup (no zope.app. imports). 
+- Housekeeping: isort imports, autopep8, minor manual cleanup (no zope.app. imports).
   [jensens]
 
 
