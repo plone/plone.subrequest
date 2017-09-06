@@ -132,6 +132,14 @@ Or might raise an error.
     >>> response.status
     500
 
+Or might raise an error rendered by a custom error view.
+
+    >>> response = subrequest('/@@custom-error')
+    >>> response.status
+    500
+    >>> response.body
+    'Custom exception occurred: A custom error'
+
 .. test-case: status-ok
 
 So check for the expected status.

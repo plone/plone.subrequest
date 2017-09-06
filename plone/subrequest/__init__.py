@@ -11,6 +11,7 @@ from posixpath import normpath
 from urllib import unquote  # Python2.4 does not have urlparse.unquote
 from urlparse import urljoin
 from urlparse import urlsplit
+from zope.component import queryMultiAdapter
 from zope.globalrequest import getRequest
 from zope.globalrequest import setRequest
 from zope.interface import alsoProvides
@@ -162,7 +163,12 @@ def subrequest(url, root=None, stdout=None, exception_handler=None):
             if exception_handler is not None:
                 exception_handler(response, e)
             else:
-                response.exception()
+                view = queryMultiAdapter((e, request), name=u'index.html')
+                if view is not None:
+                    v = view()
+                    response.setBody(v)
+                else:
+                    response.exception()
         return response
     finally:
         if SAFE_WRITE_KEY in request.environ:
@@ -188,4 +194,4 @@ def unauthorized_exception_handler(response, exception):
     """
     if not isinstance(exception, Unauthorized):
         return response.exception()
-    response.setStatus = 401
+    response.setStatus(401)
