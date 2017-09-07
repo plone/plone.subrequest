@@ -5,7 +5,7 @@ from setuptools import setup
 import os.path
 
 
-version = '1.8.4'
+version = '1.8.5.dev0'
 
 setup(
     name='plone.subrequest',
