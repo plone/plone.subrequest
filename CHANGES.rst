@@ -4,10 +4,6 @@ Changelog
 1.8.4 (unreleased)
 ------------------
 
-Breaking changes:
-
-- *add item here*
-
 New features:
 
 - Add support for Zope exception views when explicit exception handler
