@@ -8,9 +8,9 @@ from plone.subrequest.interfaces import ISubRequest
 from plone.subrequest.subresponse import SubResponse
 from posixpath import normpath
 from six.moves import cStringIO as StringIO
+from six.moves.urllib.parse import unquote
 from six.moves.urllib.parse import urljoin
 from six.moves.urllib.parse import urlsplit
-from urllib import unquote
 from zope.component import queryMultiAdapter
 from zope.globalrequest import getRequest
 from zope.globalrequest import setRequest
