@@ -3,14 +3,14 @@ from AccessControl import getSecurityManager
 from AccessControl import Unauthorized
 from AccessControl.SecurityManagement import setSecurityManager
 from Acquisition import aq_base
-from cStringIO import StringIO
 from logging import getLogger
 from plone.subrequest.interfaces import ISubRequest
 from plone.subrequest.subresponse import SubResponse
 from posixpath import normpath
-from urllib import unquote  # Python2.4 does not have urlparse.unquote
-from urlparse import urljoin
-from urlparse import urlsplit
+from six.moves import cStringIO as StringIO
+from six.moves.urllib.parse import unquote
+from six.moves.urllib.parse import urljoin
+from six.moves.urllib.parse import urlsplit
 from zope.component import queryMultiAdapter
 from zope.globalrequest import getRequest
 from zope.globalrequest import setRequest
@@ -23,6 +23,7 @@ from ZPublisher.Publish import dont_publish_class
 from ZPublisher.Publish import missing_name
 
 import re
+import six
 
 
 try:
@@ -72,7 +73,7 @@ logger = getLogger('plone.subrequest')
 
 def subrequest(url, root=None, stdout=None, exception_handler=None):
     assert url is not None, 'You must pass a url'
-    if isinstance(url, unicode):
+    if isinstance(url, six.text_type):
         url = url.encode('utf-8')
     _, _, path, query, _ = urlsplit(url)
     parent_request = getRequest()
@@ -103,7 +104,7 @@ def subrequest(url, root=None, stdout=None, exception_handler=None):
     else:
         try:
             parent_url = parent_request['URL']
-            if isinstance(parent_url, unicode):
+            if isinstance(parent_url, six.text_type):
                 parent_url = parent_url.encode('utf-8')
             # extra is the hidden part of the url, e.g. a default view
             extra = unquote(parent_url[len(parent_request['ACTUAL_URL']):])
@@ -158,7 +159,7 @@ def subrequest(url, root=None, stdout=None, exception_handler=None):
                 response.setBody(result)
             for key, value in request.response.cookies.items():
                 parent_request.response.cookies[key] = value
-        except Exception, e:
+        except Exception as e:
             logger.exception('Error handling subrequest to {0}'.format(url))
             if exception_handler is not None:
                 exception_handler(response, e)

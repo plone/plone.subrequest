@@ -44,6 +44,7 @@ setup(
         # 'Acquisition',
         'five.globalrequest',
         'setuptools',
+        'six',
         'zope.globalrequest',
         ],
     extras_require={

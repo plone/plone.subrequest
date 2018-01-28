@@ -27,7 +27,7 @@ class SubResponse(HTTPResponse):
             return
         try:
             while True:
-                chunk = body.next()
+                chunk = next(body)
                 self.write(chunk)
         except StopIteration:
             pass
