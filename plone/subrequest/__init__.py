@@ -19,8 +19,8 @@ from zope.site.hooks import getSite
 from zope.site.hooks import setSite
 from ZPublisher.BaseRequest import RequestContainer
 from ZPublisher.mapply import mapply
-from ZPublisher.Publish import dont_publish_class
-from ZPublisher.Publish import missing_name
+from ZPublisher.WSGIPublisher import dont_publish_class
+from ZPublisher.WSGIPublisher import missing_name
 
 import re
 import six
