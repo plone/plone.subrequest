@@ -19,12 +19,16 @@ from zope.site.hooks import getSite
 from zope.site.hooks import setSite
 from ZPublisher.BaseRequest import RequestContainer
 from ZPublisher.mapply import mapply
-from ZPublisher.Publish import dont_publish_class
-from ZPublisher.Publish import missing_name
 
 import re
 import six
 
+try:
+    from ZPublisher.WSGIPublisher import dont_publish_class
+    from ZPublisher.WSGIPublisher import missing_name
+except ImportError:
+    from ZPublisher.Publish import dont_publish_class
+    from ZPublisher.Publish import missing_name
 
 try:
     from plone.protect.auto import SAFE_WRITE_KEY
