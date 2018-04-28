@@ -10,11 +10,13 @@ Breaking changes:
 
 New features:
 
-- *add item here*
+- Fix importsi without ZServer
+  [pbauer]
 
 Bug fixes:
 
-- *add item here*
+- More Python 3 compatibility
+  [ale-rt]
 
 
 1.8.5 (2018-01-30)
