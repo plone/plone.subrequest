@@ -249,7 +249,7 @@ class IntegrationTests(unittest.TestCase):
         self.assertTrue(isinstance(response.stdout, filestream_iterator))
         self.assertEqual(response.getBody(), 'Test')
 
-    @unittest.skipUnless(HAS_BLOBSTREAM_ITERATOR)
+    @unittest.skipUnless(HAS_BLOBSTREAM_ITERATOR, 'requires Archetypes')
     def test_blobstream_iterator(self):
         # Only a ZServerHTTPResponse is IStreamIterator Aware
         from ZServer.HTTPResponse import ZServerHTTPResponse
