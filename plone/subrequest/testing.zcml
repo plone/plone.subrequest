@@ -72,6 +72,7 @@
         for="*"
         class="plone.subrequest.testing.BlobStreamIteratorView"
         permission="zope.Public"
+        zcml:condition="installed plone.app.blob"
         />
 
     <browser:defaultView

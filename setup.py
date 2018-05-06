@@ -52,12 +52,13 @@ setup(
             'five.localsitemanager',
             'manuel',
             'plone.testing [z2]',
+        ],
+        'archetypes': [
             'plone.app.blob',
-
             # see https://github.com/plone/plone.app.blob/issues/19
             'Products.MimetypesRegistry',
-            ],
-        },
+        ],
+    },
     entry_points="""
     [z3c.autoinclude.plugin]
     target = plone
