@@ -18,6 +18,9 @@ Bug fixes:
 - More Python 3 compatibility
   [ale-rt]
 
+- Make test dependency on Archetypes optional.
+  [davisagli]
+
 
 1.8.5 (2018-01-30)
 ------------------
