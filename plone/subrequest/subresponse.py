@@ -2,6 +2,9 @@
 from ZPublisher.HTTPResponse import HTTPResponse
 from ZPublisher.Iterators import IStreamIterator
 
+import io
+import six
+
 
 try:
     from plone.app.blob.iterators import BlobStreamIterator
@@ -38,7 +41,14 @@ class SubResponse(HTTPResponse):
     def outputBody(self):
         """Output the response body."""
         if not self._wrote:
-            self.stdout.write(self.body)
+            body = self.body
+            if isinstance(self.stdout, io.BufferedIOBase)\
+                    and isinstance(body, six.text_type):
+                body = body.encode('utf-8')
+            elif isinstance(self.stdout, io.TextIOBase)\
+                    and isinstance(body, six.binary_type):
+                body = body.decode('utf-8')
+            self.stdout.write(body)
             self._wrote = 1
 
     def getBody(self):

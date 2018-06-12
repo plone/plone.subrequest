@@ -15,8 +15,8 @@ New features:
 
 Bug fixes:
 
-- More Python 3 compatibility
-  [ale-rt]
+- More Python 3 compatibility.
+  [ale-rt, thet]
 
 - Make test dependency on Archetypes optional.
   [davisagli]
