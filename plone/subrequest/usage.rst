@@ -40,7 +40,7 @@ Some code may call ``response.write(data)``.
 
 In which case you may access response.stdout as file.
 
-    >>> response.stdout.seek(0, 0)
+    >>> response.stdout.seek(0, 0) or 0  # Py2 returns None, Py3 returns new position
     0
     >>> list(response.stdout)
     ['Some data.\n', 'Some more data.\n']
@@ -64,7 +64,7 @@ Use ``response.outputBody()`` to ensure the body may be accessed as a file.
     >>> response.outputBody()
     >>> response._wrote
     1
-    >>> response.stdout.seek(0, 0)
+    >>> response.stdout.seek(0, 0) or 0  # Py2 returns None, Py3 returns new position
     0
     >>> list(response.stdout)
     ['http://nohost/folder1']
