@@ -13,7 +13,7 @@ setup(
     description='Subrequests for Zope2',
     long_description=(
         open("README.rst").read() + "\n\n" +
-        open(os.path.join('plone', 'subrequest', 'usage.txt')).read() +
+        open(os.path.join('plone', 'subrequest', 'usage.rst')).read() +
         "\n\n" +
         open("CHANGES.rst").read()),
     classifiers=[
