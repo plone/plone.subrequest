@@ -76,6 +76,7 @@ Relative paths
 
 Relative paths are resolved relative to the parent request's location:
 
+    >>> from plone.subrequest.tests import traverse
     >>> request = traverse('/folder1/@@test')
     >>> response = subrequest('folder1A/@@url')
     >>> response.getBody()
@@ -99,10 +100,10 @@ Virtual hosting
 
 When virtual hosting is used, absolute paths are traversed from the virtual host root.
 
-    >>> request = traverse('/VirtualHostBase/http/example.org:80/folder1/VirtualHostRoot/')
+    >>> request = traverse('/VirtualHostBase/http/nohost:80/folder1/VirtualHostRoot/')
     >>> response = subrequest('/folder1A/@@url')
     >>> response.getBody()
-    b'http://example.org/folder1A'
+    b'http://nohost/folder1A'
 
 Specifying the root
 -------------------
