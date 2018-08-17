@@ -13,7 +13,7 @@ setup(
     description='Subrequests for Zope2',
     long_description=(
         open("README.rst").read() + "\n\n" +
-        open(os.path.join('plone', 'subrequest', 'usage.txt')).read() +
+        open(os.path.join('plone', 'subrequest', 'usage.rst')).read() +
         "\n\n" +
         open("CHANGES.rst").read()),
     classifiers=[
@@ -27,8 +27,8 @@ setup(
         "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
         "Operating System :: OS Independent",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 2.6",
         "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3.6",
     ],
     keywords='plone',
     author='Plone Foundation',
@@ -52,12 +52,13 @@ setup(
             'five.localsitemanager',
             'manuel',
             'plone.testing [z2]',
+        ],
+        'archetypes': [
             'plone.app.blob',
-
             # see https://github.com/plone/plone.app.blob/issues/19
             'Products.MimetypesRegistry',
-            ],
-        },
+        ],
+    },
     entry_points="""
     [z3c.autoinclude.plugin]
     target = plone

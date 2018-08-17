@@ -11,11 +11,12 @@ Call ``subrequest(url)``, it returns a response object.
     >>> from plone.subrequest import subrequest
     >>> response = subrequest('/folder1/@@url')
     >>> response.getBody()
-    'http://nohost/folder1'
+    b'http://nohost/folder1'
 
 .. test-case: response-write
 
 ``response.getBody()`` also works for code that calls ``response.write(data)``.
+This one returns a text/non-byte value.
 
     >>> response = subrequest('/@@response-write')
     >>> response.getBody()
@@ -39,7 +40,8 @@ Some code may call ``response.write(data)``.
 
 In which case you may access response.stdout as file.
 
-    >>> response.stdout.seek(0, 0)
+    >>> response.stdout.seek(0, 0) or 0  # Py2 returns None, Py3 returns new position
+    0
     >>> list(response.stdout)
     ['Some data.\n', 'Some more data.\n']
 
@@ -62,7 +64,8 @@ Use ``response.outputBody()`` to ensure the body may be accessed as a file.
     >>> response.outputBody()
     >>> response._wrote
     1
-    >>> response.stdout.seek(0, 0)
+    >>> response.stdout.seek(0, 0) or 0  # Py2 returns None, Py3 returns new position
+    0
     >>> list(response.stdout)
     ['http://nohost/folder1']
 
@@ -73,10 +76,11 @@ Relative paths
 
 Relative paths are resolved relative to the parent request's location:
 
+    >>> from plone.subrequest.tests import traverse
     >>> request = traverse('/folder1/@@test')
     >>> response = subrequest('folder1A/@@url')
     >>> response.getBody()
-    'http://nohost/folder1/folder1A'
+    b'http://nohost/folder1/folder1A'
 
 .. test-case: relative-default-view
 
@@ -87,7 +91,7 @@ This takes account of default view's url.
     True
     >>> response = subrequest('folder1A/@@url')
     >>> response.getBody()
-    'http://nohost/folder1/folder1A'
+    b'http://nohost/folder1/folder1A'
 
 Virtual hosting
 ---------------
@@ -96,10 +100,10 @@ Virtual hosting
 
 When virtual hosting is used, absolute paths are traversed from the virtual host root.
 
-    >>> request = traverse('/VirtualHostBase/http/example.org:80/folder1/VirtualHostRoot/')
+    >>> request = traverse('/VirtualHostBase/http/nohost:80/folder1/VirtualHostRoot/')
     >>> response = subrequest('/folder1A/@@url')
     >>> response.getBody()
-    'http://example.org/folder1A'
+    b'http://nohost/folder1A'
 
 Specifying the root
 -------------------
@@ -111,7 +115,7 @@ You may also set the root object explicitly
     >>> app = layer['app']
     >>> response = subrequest('/folder1A/@@url', root=app.folder1)
     >>> response.getBody()
-    'http://nohost/folder1/folder1A'
+    b'http://nohost/folder1/folder1A'
 
 Error responses
 ---------------
@@ -138,7 +142,7 @@ Or might raise an error rendered by a custom error view.
     >>> response.status
     500
     >>> response.body
-    'Custom exception occurred: A custom error'
+    b'Custom exception occurred: A custom error'
 
 .. test-case: status-ok
 

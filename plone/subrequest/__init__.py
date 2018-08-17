@@ -19,12 +19,17 @@ from zope.site.hooks import getSite
 from zope.site.hooks import setSite
 from ZPublisher.BaseRequest import RequestContainer
 from ZPublisher.mapply import mapply
-from ZPublisher.Publish import dont_publish_class
-from ZPublisher.Publish import missing_name
 
 import re
 import six
 
+
+try:
+    from ZPublisher.WSGIPublisher import dont_publish_class
+    from ZPublisher.WSGIPublisher import missing_name
+except ImportError:
+    from ZPublisher.Publish import dont_publish_class
+    from ZPublisher.Publish import missing_name
 
 try:
     from plone.protect.auto import SAFE_WRITE_KEY
@@ -73,8 +78,8 @@ logger = getLogger('plone.subrequest')
 
 def subrequest(url, root=None, stdout=None, exception_handler=None):
     assert url is not None, 'You must pass a url'
-    if isinstance(url, six.text_type):
-        url = url.encode('utf-8')
+    if isinstance(url, six.binary_type):
+        url = url.decode('utf-8')
     _, _, path, query, _ = urlsplit(url)
     parent_request = getRequest()
     assert parent_request is not None, \
@@ -104,10 +109,12 @@ def subrequest(url, root=None, stdout=None, exception_handler=None):
     else:
         try:
             parent_url = parent_request['URL']
-            if isinstance(parent_url, six.text_type):
+            if isinstance(parent_url, six.binary_type):
                 parent_url = parent_url.encode('utf-8')
             # extra is the hidden part of the url, e.g. a default view
-            extra = unquote(parent_url[len(parent_request['ACTUAL_URL']):])
+            extra = unquote(
+                parent_url[len(parent_request['ACTUAL_URL']):]
+            )
         except KeyError:
             extra = ''
         here = parent_request['PATH_INFO'] + extra

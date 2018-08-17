@@ -1,6 +1,7 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
-    xmlns:browser="http://namespaces.zope.org/browser">
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:zcml="http://namespaces.zope.org/zcml">
 
     <include package="plone.subrequest" />
 
@@ -72,6 +73,7 @@
         for="*"
         class="plone.subrequest.testing.BlobStreamIteratorView"
         permission="zope.Public"
+        zcml:condition="installed plone.app.blob"
         />
 
     <browser:defaultView

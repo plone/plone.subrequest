@@ -8,6 +8,8 @@ from plone.testing import zodb
 from Products.Five.browser import BrowserView
 from zope.globalrequest import setRequest
 
+import six
+
 
 class CustomException(Exception):
     """Custom exception"""
@@ -16,7 +18,7 @@ class CustomException(Exception):
 class CustomExceptionHandler(BrowserView):
     def __call__(self):
         self.request.response.setStatus(500)
-        return "Custom exception occurred: {0:s}".format(self.context)
+        return "Custom exception occurred: {0}".format(self.context)
 
 
 class CookieView(BrowserView):
@@ -40,8 +42,6 @@ class URLView(BrowserView):
 
     def __call__(self):
         url = self.context.absolute_url()
-        # The absolute url is expected to be an encoded string, not unicode.
-        assert isinstance(url, str)
         return url
 
 
