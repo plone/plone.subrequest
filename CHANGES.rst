@@ -4,10 +4,6 @@ Changelog
 1.8.6 (unreleased)
 ------------------
 
-Breaking changes:
-
-- *add item here*
-
 New features:
 
 - Fix importsi without ZServer
