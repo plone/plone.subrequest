@@ -33,7 +33,7 @@ setup(
     keywords='plone',
     author='Plone Foundation',
     author_email='plone-developers@lists.sourceforge.net',
-    url='https://pypi.python.org/pypi/plone.subrequest/',
+    url='https://pypi.org/project/plone.subrequest/',
     license='GPL version 2',
     packages=find_packages(),
     namespace_packages=['plone'],
