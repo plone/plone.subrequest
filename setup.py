@@ -44,7 +44,6 @@ setup(
     zip_safe=False,
     install_requires=[
         # 'Acquisition',
-        'five.globalrequest',
         'setuptools',
         'six',
         'zope.globalrequest',
