@@ -10,14 +10,6 @@ Breaking changes:
   It has been deprecated upstream (on Zope 4).
   [gforcada]
 
-New features:
-
-- *add item here*
-
-Bug fixes:
-
-- *add item here*
-
 
 1.8.6 (2018-09-23)
 ------------------
