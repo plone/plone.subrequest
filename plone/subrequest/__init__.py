@@ -167,7 +167,7 @@ def subrequest(url, root=None, stdout=None, exception_handler=None):
             for key, value in request.response.cookies.items():
                 parent_request.response.cookies[key] = value
         except Exception as e:
-            logger.exception('Error handling subrequest to {0}'.format(url))
+            logger.exception(u'Error handling subrequest to {0}'.format(url))
             if exception_handler is not None:
                 exception_handler(response, e)
             else:
