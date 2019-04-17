@@ -78,8 +78,8 @@ logger = getLogger('plone.subrequest')
 
 def subrequest(url, root=None, stdout=None, exception_handler=None):
     assert url is not None, 'You must pass a url'
-    if isinstance(url, six.binary_type):
-        url = url.decode('utf-8')
+    if six.PY2 and isinstance(url, six.text_type):
+        url = url.encode('utf-8')
     _, _, path, query, _ = urlsplit(url)
     parent_request = getRequest()
     assert parent_request is not None, \
