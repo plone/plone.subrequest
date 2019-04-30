@@ -8,6 +8,15 @@ Changelog
 
 .. towncrier release notes start
 
+1.9.1 (2019-04-29)
+------------------
+
+Bug fixes:
+
+
+- fix regression bug which was breaking in Python 2.7 when tiles contain non-ascii characters [MrTango] (#22)
+
+
 1.9.0 (2018-12-11)
 ------------------
 

@@ -1,1 +1,0 @@
-fix regression bug which was breaking in Python 2.7 when tiles contain non-ascii characters [MrTango]
