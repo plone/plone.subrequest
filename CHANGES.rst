@@ -4,17 +4,12 @@ Changelog
 1.8.7 (unreleased)
 ------------------
 
-Breaking changes:
-
-- *add item here*
-
-New features:
-
-- *add item here*
-
 Bug fixes:
 
-- *add item here*
+- Restored to 1.8.4 version.  Kept only the optional Archetypes test dependency.
+  Plone 4.3, 5,0 and 5.1 do not need the Python 3 and Zope 4 fixes, and may give errors.
+  Plone 5.2 does not use this branch.
+  Fixes `issue 2995 <https://github.com/plone/Products.CMFPlone/issues/2995>`_.  [maurits]
 
 
 1.8.6 (2018-09-23)

@@ -9,19 +9,7 @@ from zope.site.hooks import getSite
 import manuel.doctest
 import manuel.testcase
 import manuel.testing
-
-import doctest
-import re
-import six
 import unittest
-
-
-try:
-    from ZServer.HTTPResponse import ZServerHTTPResponse
-except ImportError:
-    HAS_ZSERVER = False
-else:
-    HAS_ZSERVER = True
 
 
 try:
@@ -41,7 +29,7 @@ def traverse(url):
 
 
 VH_TPL = (
-    '/VirtualHostBase/http/nohost:80/{0}/VirtualHostRoot'
+    '/VirtualHostBase/http/example.org:80/{0}/VirtualHostRoot'
     '/_vh_fizz/_vh_buzz/_vh_fizzbuzz/{1}'
 )
 NOHOST_VH_TPL = 'http://nohost' + VH_TPL
@@ -61,7 +49,7 @@ class FunctionalTests(unittest.TestCase):
         parts = ('folder1', 'folder1A/@@url')
         expect = 'folder1A'
         url = NOHOST_VH_TPL.format(*parts)
-        expect_url = 'http://nohost/fizz/buzz/fizzbuzz/{0}'.format(expect)
+        expect_url = 'http://example.org/fizz/buzz/fizzbuzz/{0}'.format(expect)
         self.browser.open(url)
         self.assertEqual(self.browser.contents, expect_url)
 
@@ -69,7 +57,7 @@ class FunctionalTests(unittest.TestCase):
         parts = ('folder1', 'folder1A?url=folder1Ai/@@url')
         expect = 'folder1A/folder1Ai'
         url = NOHOST_VH_TPL.format(*parts)
-        expect_url = 'http://nohost/fizz/buzz/fizzbuzz/{0}'.format(expect)
+        expect_url = 'http://example.org/fizz/buzz/fizzbuzz/{0}'.format(expect)
         self.browser.open(url)
         self.assertEqual(self.browser.contents, expect_url)
 
@@ -77,7 +65,7 @@ class FunctionalTests(unittest.TestCase):
         parts = ('folder1', 'folder1A?url=/folder1B/@@url')
         expect = 'folder1B'
         url = NOHOST_VH_TPL.format(*parts)
-        expect_url = 'http://nohost/fizz/buzz/fizzbuzz/{0}'.format(expect)
+        expect_url = 'http://example.org/fizz/buzz/fizzbuzz/{0}'.format(expect)
         self.browser.open(url)
         self.assertEqual(self.browser.contents, expect_url)
 
@@ -89,14 +77,14 @@ class IntegrationTests(unittest.TestCase):
         response = subrequest('/folder1/@@url')
         self.assertEqual(
             response.body,
-            b'http://nohost/folder1'
+            'http://nohost/folder1'
         )
 
     def test_absolute_query(self):
         response = subrequest('/folder1/folder1A?url=/folder2/folder2A/@@url')
         self.assertEqual(
             response.body,
-            b'http://nohost/folder2/folder2A'
+            'http://nohost/folder2/folder2A'
         )
 
     def test_relative(self):
@@ -104,14 +92,14 @@ class IntegrationTests(unittest.TestCase):
         # /folder1 resolves to /folder1/@@test
         self.assertEqual(
             response.body,
-            b'http://nohost/folder1/folder1B'
+            'http://nohost/folder1/folder1B'
         )
 
     def test_root(self):
         response = subrequest('/')
         self.assertEqual(
             response.body,
-            b'Root: http://nohost'
+            'Root: http://nohost'
         )
 
     def test_virtual_hosting(self):
@@ -119,7 +107,7 @@ class IntegrationTests(unittest.TestCase):
         response = subrequest(url)
         self.assertEqual(
             response.body,
-            b'http://nohost/fizz/buzz/fizzbuzz/folder1A'
+            'http://example.org/fizz/buzz/fizzbuzz/folder1A'
         )
 
     def test_virtual_hosting_unicode(self):
@@ -127,7 +115,7 @@ class IntegrationTests(unittest.TestCase):
         response = subrequest(url)
         self.assertEqual(
             response.body,
-            b'http://nohost/fizz/buzz/fizzbuzz/folder1A'
+            'http://example.org/fizz/buzz/fizzbuzz/folder1A'
         )
 
     def test_virtual_hosting_relative(self):
@@ -135,7 +123,7 @@ class IntegrationTests(unittest.TestCase):
         response = subrequest(url)
         self.assertEqual(
             response.body,
-            b'http://nohost/fizz/buzz/fizzbuzz/folder1B'
+            'http://example.org/fizz/buzz/fizzbuzz/folder1B'
         )
 
     def test_not_found(self):
@@ -149,7 +137,7 @@ class IntegrationTests(unittest.TestCase):
         response = subrequest('/folder1B/@@url')
         self.assertEqual(
             response.body,
-            b'http://nohost/fizz/buzz/fizzbuzz/folder1B'
+            'http://example.org/fizz/buzz/fizzbuzz/folder1B'
         )
 
     def test_virtual_host_root_with_root(self):
@@ -160,13 +148,13 @@ class IntegrationTests(unittest.TestCase):
         response = subrequest('/folder1Ai/@@url', root=app.folder1.folder1A)
         self.assertEqual(
             response.body,
-            b'http://nohost/fizz/buzz/fizzbuzz/folder1A/folder1Ai'
+            'http://example.org/fizz/buzz/fizzbuzz/folder1A/folder1Ai'
         )
 
     def test_virtual_host_space(self):
         parts = ('folder2', 'folder2A/folder2Ai space/@@url')
         url = (
-            '/VirtualHostBase/http/nohost:80/'
+            '/VirtualHostBase/http/example.org:80/'
             '{0}/VirtualHostRoot/{1}'.format(*parts)
         )
         traverse(url)
@@ -174,36 +162,36 @@ class IntegrationTests(unittest.TestCase):
         response = subrequest('/folder2A/@@url', root=app.folder2)
         self.assertEqual(
             response.body,
-            b'http://nohost/folder2A'
+            'http://example.org/folder2A'
         )
 
     def test_virtual_host_root_at_root(self):
         url = (
-            '/VirtualHostBase/http/nohost:80/folder1/VirtualHostRoot/'
+            '/VirtualHostBase/http/example.org:80/folder1/VirtualHostRoot/'
             '_vh_fizz/_vh_buzz/_vh_fizzbuzz'
         )
         traverse(url)
         response = subrequest('/folder1B/@@url')
         self.assertEqual(
             response.body,
-            b'http://nohost/fizz/buzz/fizzbuzz/folder1B'
+            'http://example.org/fizz/buzz/fizzbuzz/folder1B'
         )
 
     def test_virtual_host_root_at_root_trailing(self):
         url = (
-            '/VirtualHostBase/http/nohost:80/folder1/VirtualHostRoot/'
+            '/VirtualHostBase/http/example.org:80/folder1/VirtualHostRoot/'
             '_vh_fizz/_vh_buzz/_vh_fizzbuzz/'
         )
         traverse(url)
         response = subrequest('/folder1B/@@url')
         self.assertEqual(
             response.body,
-            b'http://nohost/fizz/buzz/fizzbuzz/folder1B'
+            'http://example.org/fizz/buzz/fizzbuzz/folder1B'
         )
 
     def test_virtual_host_with_root_double_slash(self):
         url = (
-            '/VirtualHostBase/http/nohost:80/VirtualHostRoot/'
+            '/VirtualHostBase/http/example.org:80/VirtualHostRoot/'
             '_vh_fizz/folder1/folder2//folder2A'
         )
         traverse(url)
@@ -211,7 +199,7 @@ class IntegrationTests(unittest.TestCase):
         response = subrequest('/folder1B/@@url', root=root)
         self.assertEqual(
             response.body,
-            b'http://nohost/fizz/folder1/folder1B'
+            'http://example.org/fizz/folder1/folder1B'
         )
 
     def test_subrequest_root(self):
@@ -219,7 +207,7 @@ class IntegrationTests(unittest.TestCase):
         response = subrequest('/folder1Ai/@@url', root=app.folder1.folder1A)
         self.assertEqual(
             response.body,
-            b'http://nohost/folder1/folder1A/folder1Ai'
+            'http://nohost/folder1/folder1A/folder1Ai'
         )
 
     def test_site(self):
@@ -232,29 +220,29 @@ class IntegrationTests(unittest.TestCase):
 
     def test_parameter(self):
         response = subrequest('/folder1/@@parameter?foo=bar')
-        self.assertTrue(b'foo' in response.body)
+        self.assertTrue('foo' in response.body)
 
     def test_cookies(self):
         request = getRequest()
         request.response.setCookie('cookie_name', 'cookie_value')
         response = subrequest('/folder1/@@parameter')
-        self.assertTrue(b"'cookie_name'" in response.body)
+        self.assertTrue("'cookie_name'" in response.body)
 
     def test_subrequest_cookies(self):
         response = subrequest('/folder1/@@test?url=/folder1/cookie')
         self.assertTrue('cookie_name' in response.cookies)
 
-    @unittest.skipUnless(HAS_ZSERVER, 'needs ZServer')
     def test_stream_iterator(self):
         # Only a ZServerHTTPResponse is IStreamIterator Aware
+        from ZServer.HTTPResponse import ZServerHTTPResponse
         request = getRequest()
         request.response.__class__ = ZServerHTTPResponse
         response = subrequest('/@@stream')
         self.assertEqual(response.getBody(), 'hello')
 
-    @unittest.skipUnless(HAS_ZSERVER, 'needs ZServer')
     def test_filestream_iterator(self):
         # Only a ZServerHTTPResponse is IStreamIterator Aware
+        from ZServer.HTTPResponse import ZServerHTTPResponse
         request = getRequest()
         request.response.__class__ = ZServerHTTPResponse
         response = subrequest('/@@filestream')
@@ -262,10 +250,10 @@ class IntegrationTests(unittest.TestCase):
         self.assertTrue(isinstance(response.stdout, filestream_iterator))
         self.assertEqual(response.getBody(), 'Test')
 
-    @unittest.skipUnless(HAS_ZSERVER, 'needs ZServer')
     @unittest.skipUnless(HAS_BLOBSTREAM_ITERATOR, 'requires Archetypes')
     def test_blobstream_iterator(self):
         # Only a ZServerHTTPResponse is IStreamIterator Aware
+        from ZServer.HTTPResponse import ZServerHTTPResponse
         request = getRequest()
         request.response.__class__ = ZServerHTTPResponse
         response = subrequest('/@@blobstream')
@@ -279,27 +267,20 @@ class IntegrationTests(unittest.TestCase):
         request['VIRTUAL_URL'] = 'parent'
         request['URL9'] = 'parent'
         response = subrequest('/folder1/@@parameter')
-        self.assertTrue(b"'foo'" in response.body)
-        self.assertFalse(b"'URL9'" in response.body)
-        self.assertFalse(b"'VIRTUAL_URL'" in response.body)
-
-
-class Py23DocChecker(doctest.OutputChecker):
-    def check_output(self, want, got, optionflags):
-        if six.PY2:
-            want = re.sub("b'(.*?)'", "'\\1'", want)
-        return doctest.OutputChecker.check_output(self, want, got, optionflags)
+        self.assertTrue("'foo'" in response.body)
+        self.assertFalse("'URL9'" in response.body)
+        self.assertFalse("'VIRTUAL_URL'" in response.body)
 
 
 def test_suite():
     suite = unittest.defaultTestLoader.loadTestsFromName(__name__)
-    m = manuel.doctest.Manuel(checker=Py23DocChecker())
+    m = manuel.doctest.Manuel()
     m += manuel.testcase.MarkerManuel()
     doctests = manuel.testing.TestSuite(
         m,
-        'usage.rst',
+        'usage.txt',
         globs=dict(subrequest=subrequest, traverse=traverse)
-     )
+    )
     # Set the layer on the manuel doctests for now
     for test in doctests:
         test.layer = INTEGRATION_TESTING
