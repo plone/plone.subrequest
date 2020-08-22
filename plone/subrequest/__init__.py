@@ -12,11 +12,11 @@ from six.moves.urllib.parse import unquote
 from six.moves.urllib.parse import urljoin
 from six.moves.urllib.parse import urlsplit
 from zope.component import queryMultiAdapter
+from zope.component.hooks import getSite
+from zope.component.hooks import setSite
 from zope.globalrequest import getRequest
 from zope.globalrequest import setRequest
 from zope.interface import alsoProvides
-from zope.site.hooks import getSite
-from zope.site.hooks import setSite
 from ZPublisher.BaseRequest import RequestContainer
 from ZPublisher.mapply import mapply
 
