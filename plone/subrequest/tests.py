@@ -4,7 +4,7 @@ from plone.subrequest.testing import FUNCTIONAL_TESTING
 from plone.subrequest.testing import INTEGRATION_TESTING
 from plone.testing import z2
 from zope.globalrequest import getRequest
-from zope.site.hooks import getSite
+from zope.component.hooks import getSite
 
 import manuel.doctest
 import manuel.testcase
