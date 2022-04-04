@@ -1,13 +1,11 @@
 from five.localsitemanager import make_site
 from plone.subrequest import subrequest
 from plone.testing import Layer
-from plone.testing import z2
 from plone.testing import zca
 from plone.testing import zodb
+from plone.testing import zope
 from Products.Five.browser import BrowserView
 from zope.globalrequest import setRequest
-
-import six
 
 
 class CustomException(Exception):
@@ -90,27 +88,16 @@ class FileStreamIteratorView(BrowserView):
         return filestream_iterator(filename)
 
 
-class BlobStreamIteratorView(BrowserView):
-    def __call__(self):
-        from plone.app.blob.iterators import BlobStreamIterator
-        from ZODB.blob import Blob
-
-        myblob = Blob()
-        with myblob.open("w") as fd:
-            fd.write("Hi, Blob!")
-        return BlobStreamIterator(myblob)
-
-
 def singleton(cls):
     return cls()
 
 
 @singleton
 class PLONE_SUBREQEST_FIXTURE(Layer):
-    defaultBases = (z2.STARTUP,)
+    defaultBases = (zope.STARTUP,)
 
     def setUp(self):
-        # Stack a new DemoStorage on top of the one from z2.STARTUP.
+        # Stack a new DemoStorage on top of the one from zope.STARTUP.
         self["zodbDB"] = zodb.stackDemoStorage(
             self.get("zodbDB"), name="PloneSubRequestFixture"
         )
@@ -128,9 +115,9 @@ class PLONE_SUBREQEST_FIXTURE(Layer):
 
         xmlconfig.file("testing.zcml", plone.subrequest, context=context)
 
-        with z2.zopeApp() as app:
+        with zope.zopeApp() as app:
             # Enable virtual hosting
-            z2.installProduct(app, "Products.SiteAccess")
+            zope.installProduct(app, "Products.SiteAccess")
             from Products.SiteAccess.VirtualHostMonster import VirtualHostMonster
 
             vhm = VirtualHostMonster()
@@ -158,7 +145,7 @@ class PLONE_SUBREQEST_FIXTURE(Layer):
         del self["zodbDB"]
 
 
-class PloneSubrequestLifecycle(z2.IntegrationTesting):
+class PloneSubrequestLifecycle(zope.IntegrationTesting):
     def testSetUp(self):
         super().testSetUp()
         request = self["request"]
@@ -173,6 +160,6 @@ class PloneSubrequestLifecycle(z2.IntegrationTesting):
 INTEGRATION_TESTING = PloneSubrequestLifecycle(
     bases=(PLONE_SUBREQEST_FIXTURE,), name="PloneSubrequest:Integration"
 )
-FUNCTIONAL_TESTING = z2.FunctionalTesting(
+FUNCTIONAL_TESTING = zope.FunctionalTesting(
     bases=(PLONE_SUBREQEST_FIXTURE,), name="PloneSubrequest:Functional"
 )

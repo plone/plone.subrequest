@@ -1,16 +1,13 @@
 from plone.subrequest import subrequest
 from plone.subrequest.testing import FUNCTIONAL_TESTING
 from plone.subrequest.testing import INTEGRATION_TESTING
-from plone.testing import z2
+from plone.testing import zope
 from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
 
-import doctest
 import manuel.doctest
 import manuel.testcase
 import manuel.testing
-import re
-import six
 import unittest
 
 
@@ -20,14 +17,6 @@ except ImportError:
     HAS_ZSERVER = False
 else:
     HAS_ZSERVER = True
-
-
-try:
-    from plone.app.blob.iterators import BlobStreamIterator
-except ImportError:
-    HAS_BLOBSTREAM_ITERATOR = False
-else:
-    HAS_BLOBSTREAM_ITERATOR = True
 
 
 def traverse(url):
@@ -49,7 +38,7 @@ class FunctionalTests(unittest.TestCase):
     layer = FUNCTIONAL_TESTING
 
     def setUp(self):
-        self.browser = z2.Browser(self.layer["app"])
+        self.browser = zope.Browser(self.layer["app"])
 
     def test_absolute(self):
         self.browser.open("http://nohost/folder1/@@url")
@@ -218,18 +207,6 @@ class IntegrationTests(unittest.TestCase):
         self.assertTrue(isinstance(response.stdout, filestream_iterator))
         self.assertEqual(response.getBody(), "Test")
 
-    @unittest.skipUnless(HAS_ZSERVER, "needs ZServer")
-    @unittest.skipUnless(HAS_BLOBSTREAM_ITERATOR, "requires Archetypes")
-    def test_blobstream_iterator(self):
-        # Only a ZServerHTTPResponse is IStreamIterator Aware
-        request = getRequest()
-        request.response.__class__ = ZServerHTTPResponse
-        response = subrequest("/@@blobstream")
-        from ZODB.blob import BlobFile
-
-        self.assertTrue(isinstance(response.stdout, BlobFile))
-        self.assertEqual(response.getBody(), "Hi, Blob!")
-
     def test_other_variables(self):
         request = getRequest()
         request["foo"] = "bar"
@@ -241,16 +218,9 @@ class IntegrationTests(unittest.TestCase):
         self.assertFalse(b"'VIRTUAL_URL'" in response.body)
 
 
-class Py23DocChecker(doctest.OutputChecker):
-    def check_output(self, want, got, optionflags):
-        if six.PY2:
-            want = re.sub("b'(.*?)'", "'\\1'", want)
-        return doctest.OutputChecker.check_output(self, want, got, optionflags)
-
-
 def test_suite():
     suite = unittest.defaultTestLoader.loadTestsFromName(__name__)
-    m = manuel.doctest.Manuel(checker=Py23DocChecker())
+    m = manuel.doctest.Manuel()
     m += manuel.testcase.MarkerManuel()
     doctests = manuel.testing.TestSuite(
         m, "usage.rst", globs=dict(subrequest=subrequest, traverse=traverse)
