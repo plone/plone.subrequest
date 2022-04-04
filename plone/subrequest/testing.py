@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from five.localsitemanager import make_site
 from plone.subrequest import subrequest
 from plone.testing import Layer
@@ -18,7 +17,7 @@ class CustomException(Exception):
 class CustomExceptionHandler(BrowserView):
     def __call__(self):
         self.request.response.setStatus(500)
-        return "Custom exception occurred: {0}".format(self.context)
+        return f"Custom exception occurred: {self.context}"
 
 
 class CookieView(BrowserView):
@@ -31,7 +30,7 @@ class CookieView(BrowserView):
 class ParameterView(BrowserView):
 
     def __init__(self, context, request):
-        super(ParameterView, self).__init__(context, request)
+        super().__init__(context, request)
         self.keys = self.request.keys()
 
     def __call__(self):
@@ -68,7 +67,7 @@ class CustomErrorView(BrowserView):
 class RootView(BrowserView):
 
     def __call__(self):
-        return 'Root: {0}'.format(self.context.absolute_url())
+        return f'Root: {self.context.absolute_url()}'
 
 
 class SubrequestView(BrowserView):
@@ -169,13 +168,13 @@ class PLONE_SUBREQEST_FIXTURE(Layer):
 class PloneSubrequestLifecycle(z2.IntegrationTesting):
 
     def testSetUp(self):
-        super(PloneSubrequestLifecycle, self).testSetUp()
+        super().testSetUp()
         request = self['request']
         request['PARENTS'] = [self['app']]
         setRequest(request)
 
     def testTearDown(self):
-        super(PloneSubrequestLifecycle, self).testTearDown()
+        super().testTearDown()
         setRequest(None)
 
 

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from AccessControl import getSecurityManager
 from AccessControl import Unauthorized
 from AccessControl.SecurityManagement import setSecurityManager
@@ -7,10 +6,10 @@ from logging import getLogger
 from plone.subrequest.interfaces import ISubRequest
 from plone.subrequest.subresponse import SubResponse
 from posixpath import normpath
-from six.moves import cStringIO as StringIO
-from six.moves.urllib.parse import unquote
-from six.moves.urllib.parse import urljoin
-from six.moves.urllib.parse import urlsplit
+from io import StringIO
+from urllib.parse import unquote
+from urllib.parse import urljoin
+from urllib.parse import urlsplit
 from zope.component import queryMultiAdapter
 from zope.component.hooks import getSite
 from zope.component.hooks import setSite
@@ -19,28 +18,12 @@ from zope.globalrequest import setRequest
 from zope.interface import alsoProvides
 from ZPublisher.BaseRequest import RequestContainer
 from ZPublisher.mapply import mapply
+from ZPublisher.WSGIPublisher import dont_publish_class
+from ZPublisher.WSGIPublisher import missing_name
+from plone.protect.auto import SAFE_WRITE_KEY
+from plone.protect.interfaces import IDisableCSRFProtection
 
 import re
-import six
-
-
-try:
-    from ZPublisher.WSGIPublisher import dont_publish_class
-    from ZPublisher.WSGIPublisher import missing_name
-except ImportError:
-    from ZPublisher.Publish import dont_publish_class
-    from ZPublisher.Publish import missing_name
-
-try:
-    from plone.protect.auto import SAFE_WRITE_KEY
-    from plone.protect.interfaces import IDisableCSRFProtection
-except ImportError:
-    SAFE_WRITE_KEY = 'plone.protect.safe_oids'
-    from zope.interface import Interface
-
-    class IDisableCSRFProtection(Interface):
-        pass
-
 
 __all__ = ['subrequest', 'SubResponse']
 
@@ -54,7 +37,7 @@ CONDITIONAL_HEADERS = [
     'HTTP_RANGE',  # Not strictly a conditional header, but scrub it anyway
 ]
 
-OTHER_IGNORE = set([
+OTHER_IGNORE = {
     'ACTUAL_URL',
     'LANGUAGE_TOOL',
     'PARENTS',
@@ -69,7 +52,7 @@ OTHER_IGNORE = set([
     'VirtualRootPhysicalPath',
     'method',
     'traverse_subpath',
-])
+}
 
 OTHER_IGNORE_RE = re.compile(r'^(?:BASE|URL)\d+$')
 
@@ -78,8 +61,6 @@ logger = getLogger('plone.subrequest')
 
 def subrequest(url, root=None, stdout=None, exception_handler=None):
     assert url is not None, 'You must pass a url'
-    if six.PY2 and isinstance(url, six.text_type):
-        url = url.encode('utf-8')
     _, _, path, query, _ = urlsplit(url)
     parent_request = getRequest()
     assert parent_request is not None, \
@@ -99,17 +80,17 @@ def subrequest(url, root=None, stdout=None, exception_handler=None):
             if root is None:
                 path = root_path + path
             else:
-                path = '{0}/{1}{2}'.format(
+                path = '{}/{}{}'.format(
                     root_path,
                     root.virtual_url_path(),
                     path
                 )
         elif root is not None:
-            path = '/{0}{1}'.format(root.virtual_url_path(), path)
+            path = f'/{root.virtual_url_path()}{path}'
     else:
         try:
             parent_url = parent_request['URL']
-            if isinstance(parent_url, six.binary_type):
+            if isinstance(parent_url, bytes):
                 parent_url = parent_url.encode('utf-8')
             # extra is the hidden part of the url, e.g. a default view
             extra = unquote(
@@ -167,11 +148,11 @@ def subrequest(url, root=None, stdout=None, exception_handler=None):
             for key, value in request.response.cookies.items():
                 parent_request.response.cookies[key] = value
         except Exception as e:
-            logger.exception(u'Error handling subrequest to {0}'.format(url))
+            logger.exception(f'Error handling subrequest to {url}')
             if exception_handler is not None:
                 exception_handler(response, e)
             else:
-                view = queryMultiAdapter((e, request), name=u'index.html')
+                view = queryMultiAdapter((e, request), name='index.html')
                 if view is not None:
                     v = view()
                     response.setBody(v)

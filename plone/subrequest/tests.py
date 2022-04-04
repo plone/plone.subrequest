@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from plone.subrequest import subrequest
 from plone.subrequest.testing import FUNCTIONAL_TESTING
 from plone.subrequest.testing import INTEGRATION_TESTING
@@ -61,7 +60,7 @@ class FunctionalTests(unittest.TestCase):
         parts = ('folder1', 'folder1A/@@url')
         expect = 'folder1A'
         url = NOHOST_VH_TPL.format(*parts)
-        expect_url = 'http://nohost/fizz/buzz/fizzbuzz/{0}'.format(expect)
+        expect_url = f'http://nohost/fizz/buzz/fizzbuzz/{expect}'
         self.browser.open(url)
         self.assertEqual(self.browser.contents, expect_url)
 
@@ -69,7 +68,7 @@ class FunctionalTests(unittest.TestCase):
         parts = ('folder1', 'folder1A?url=folder1Ai/@@url')
         expect = 'folder1A/folder1Ai'
         url = NOHOST_VH_TPL.format(*parts)
-        expect_url = 'http://nohost/fizz/buzz/fizzbuzz/{0}'.format(expect)
+        expect_url = f'http://nohost/fizz/buzz/fizzbuzz/{expect}'
         self.browser.open(url)
         self.assertEqual(self.browser.contents, expect_url)
 
@@ -77,7 +76,7 @@ class FunctionalTests(unittest.TestCase):
         parts = ('folder1', 'folder1A?url=/folder1B/@@url')
         expect = 'folder1B'
         url = NOHOST_VH_TPL.format(*parts)
-        expect_url = 'http://nohost/fizz/buzz/fizzbuzz/{0}'.format(expect)
+        expect_url = f'http://nohost/fizz/buzz/fizzbuzz/{expect}'
         self.browser.open(url)
         self.assertEqual(self.browser.contents, expect_url)
 
@@ -167,7 +166,7 @@ class IntegrationTests(unittest.TestCase):
         parts = ('folder2', 'folder2A/folder2Ai space/@@url')
         url = (
             '/VirtualHostBase/http/nohost:80/'
-            '{0}/VirtualHostRoot/{1}'.format(*parts)
+            '{}/VirtualHostRoot/{}'.format(*parts)
         )
         traverse(url)
         app = self.layer['app']

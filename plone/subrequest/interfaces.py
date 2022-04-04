@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from zope.publisher.interfaces.browser import IBrowserRequest
 
 

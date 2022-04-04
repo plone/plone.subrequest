@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from ZPublisher.HTTPResponse import HTTPResponse
 from ZPublisher.Iterators import IStreamIterator
 
@@ -43,10 +42,10 @@ class SubResponse(HTTPResponse):
         if not self._wrote:
             body = self.body
             if isinstance(self.stdout, io.BufferedIOBase)\
-                    and isinstance(body, six.text_type):
+                    and isinstance(body, str):
                 body = body.encode('utf-8')
             elif isinstance(self.stdout, io.TextIOBase)\
-                    and isinstance(body, six.binary_type):
+                    and isinstance(body, bytes):
                 body = body.decode('utf-8')
             self.stdout.write(body)
             self._wrote = 1
