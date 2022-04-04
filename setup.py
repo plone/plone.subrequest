@@ -4,17 +4,19 @@ from setuptools import setup
 import os.path
 
 
-version = '1.9.4.dev0'
+version = "1.9.4.dev0"
 
 setup(
-    name='plone.subrequest',
+    name="plone.subrequest",
     version=version,
-    description='Subrequests for Zope2',
+    description="Subrequests for Zope2",
     long_description=(
-        open("README.rst").read() + "\n\n" +
-        open(os.path.join('plone', 'subrequest', 'usage.rst')).read() +
-        "\n\n" +
-        open("CHANGES.rst").read()),
+        open("README.rst").read()
+        + "\n\n"
+        + open(os.path.join("plone", "subrequest", "usage.rst")).read()
+        + "\n\n"
+        + open("CHANGES.rst").read()
+    ),
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Environment :: Web Environment",
@@ -32,32 +34,32 @@ setup(
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
     ],
-    keywords='plone',
-    author='Plone Foundation',
-    author_email='plone-developers@lists.sourceforge.net',
-    url='https://pypi.org/project/plone.subrequest/',
-    license='GPL version 2',
+    keywords="plone",
+    author="Plone Foundation",
+    author_email="plone-developers@lists.sourceforge.net",
+    url="https://pypi.org/project/plone.subrequest/",
+    license="GPL version 2",
     packages=find_packages(),
-    namespace_packages=['plone'],
+    namespace_packages=["plone"],
     include_package_data=True,
-    platforms='Any',
+    platforms="Any",
     zip_safe=False,
     install_requires=[
         # 'Acquisition',
-        'setuptools',
-        'six',
-        'zope.globalrequest',
-        ],
+        "setuptools",
+        "six",
+        "zope.globalrequest",
+    ],
     extras_require={
-        'test': [
-            'five.localsitemanager',
-            'manuel',
-            'plone.testing [z2]',
+        "test": [
+            "five.localsitemanager",
+            "manuel",
+            "plone.testing [z2]",
         ],
-        'archetypes': [
-            'plone.app.blob',
+        "archetypes": [
+            "plone.app.blob",
             # see https://github.com/plone/plone.app.blob/issues/19
-            'Products.MimetypesRegistry',
+            "Products.MimetypesRegistry",
         ],
     },
     entry_points="""

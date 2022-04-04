@@ -2,5 +2,4 @@ from zope.publisher.interfaces.browser import IBrowserRequest
 
 
 class ISubRequest(IBrowserRequest):
-    """Marker for sub-requests.
-    """
+    """Marker for sub-requests."""

@@ -21,14 +21,12 @@ class CustomExceptionHandler(BrowserView):
 
 
 class CookieView(BrowserView):
-
     def __call__(self):
         response = self.request.response
-        response.setCookie('cookie_name', 'cookie_value')
+        response.setCookie("cookie_name", "cookie_value")
 
 
 class ParameterView(BrowserView):
-
     def __init__(self, context, request):
         super().__init__(context, request)
         self.keys = self.request.keys()
@@ -38,74 +36,68 @@ class ParameterView(BrowserView):
 
 
 class URLView(BrowserView):
-
     def __call__(self):
         url = self.context.absolute_url()
         return url
 
 
 class ResponseWriteView(BrowserView):
-
     def __call__(self):
         response = self.request.response
-        response.write('Some data.\n')
-        response.write('Some more data.\n')
+        response.write("Some data.\n")
+        response.write("Some more data.\n")
 
 
 class ErrorView(BrowserView):
-
     def __call__(self):
-        raise Exception('An error')
+        raise Exception("An error")
 
 
 class CustomErrorView(BrowserView):
-
     def __call__(self):
-        raise CustomException('A custom error')
+        raise CustomException("A custom error")
 
 
 class RootView(BrowserView):
-
     def __call__(self):
-        return f'Root: {self.context.absolute_url()}'
+        return f"Root: {self.context.absolute_url()}"
 
 
 class SubrequestView(BrowserView):
-
     def __call__(self):
-        url = self.request.form.get('url')
+        url = self.request.form.get("url")
         if url is None:
-            return 'Expected a url'
+            return "Expected a url"
         response = subrequest(url)
         return response.body
 
 
 class StreamIteratorView(BrowserView):
-
     def __call__(self):
         from ZServer.tests.test_responses import test_streamiterator
+
         response = self.request.response
-        response.setHeader('content-length', 5)
+        response.setHeader("content-length", 5)
         return test_streamiterator()
 
 
 class FileStreamIteratorView(BrowserView):
-
     def __call__(self):
-        from ZPublisher.Iterators import filestream_iterator
         from pkg_resources import resource_filename
-        filename = resource_filename('plone.subrequest', 'testfile.txt')
+        from ZPublisher.Iterators import filestream_iterator
+
+        filename = resource_filename("plone.subrequest", "testfile.txt")
         return filestream_iterator(filename)
 
 
 class BlobStreamIteratorView(BrowserView):
-
     def __call__(self):
-        from ZODB.blob import Blob
         from plone.app.blob.iterators import BlobStreamIterator
+        from ZODB.blob import Blob
+
         myblob = Blob()
-        with myblob.open('w') as fd:
-            fd.write('Hi, Blob!')
+        with myblob.open("w") as fd:
+            fd.write("Hi, Blob!")
         return BlobStreamIterator(myblob)
 
 
@@ -119,58 +111,58 @@ class PLONE_SUBREQEST_FIXTURE(Layer):
 
     def setUp(self):
         # Stack a new DemoStorage on top of the one from z2.STARTUP.
-        self['zodbDB'] = zodb.stackDemoStorage(
-            self.get('zodbDB'),
-            name='PloneSubRequestFixture'
+        self["zodbDB"] = zodb.stackDemoStorage(
+            self.get("zodbDB"), name="PloneSubRequestFixture"
         )
 
         # Create a new global registry
         zca.pushGlobalRegistry()
-        self['configurationContext'] = context = zca.stackConfigurationContext(
-            self.get('configurationContext')
+        self["configurationContext"] = context = zca.stackConfigurationContext(
+            self.get("configurationContext")
         )
 
         # Load out ZCML
         from zope.configuration import xmlconfig
+
         import plone.subrequest
-        xmlconfig.file('testing.zcml', plone.subrequest, context=context)
+
+        xmlconfig.file("testing.zcml", plone.subrequest, context=context)
 
         with z2.zopeApp() as app:
             # Enable virtual hosting
-            z2.installProduct(app, 'Products.SiteAccess')
-            from Products.SiteAccess.VirtualHostMonster import \
-                VirtualHostMonster
+            z2.installProduct(app, "Products.SiteAccess")
+            from Products.SiteAccess.VirtualHostMonster import VirtualHostMonster
+
             vhm = VirtualHostMonster()
             app._setObject(vhm.getId(), vhm, suppress_events=True)
             # With suppress_events=False, this is called twice...
             vhm.manage_afterAdd(vhm, app)
             # Setup default content
-            app.manage_addFolder('folder1')
+            app.manage_addFolder("folder1")
             make_site(app.folder1)
-            app.folder1.manage_addFolder('folder1A')
-            app.folder1.folder1A.manage_addFolder('folder1Ai')
-            app.folder1.manage_addFolder('folder1B')
-            app.manage_addFolder('folder2')
+            app.folder1.manage_addFolder("folder1A")
+            app.folder1.folder1A.manage_addFolder("folder1Ai")
+            app.folder1.manage_addFolder("folder1B")
+            app.manage_addFolder("folder2")
             make_site(app.folder2)
-            app.folder2.manage_addFolder('folder2A')
-            app.folder2.folder2A.manage_addFolder('folder2Ai space')
+            app.folder2.manage_addFolder("folder2A")
+            app.folder2.folder2A.manage_addFolder("folder2Ai space")
 
     def tearDown(self):
         # Zap the stacked configuration context
         zca.popGlobalRegistry()
-        del self['configurationContext']
+        del self["configurationContext"]
 
         # Zap the stacked ZODB
-        self['zodbDB'].close()
-        del self['zodbDB']
+        self["zodbDB"].close()
+        del self["zodbDB"]
 
 
 class PloneSubrequestLifecycle(z2.IntegrationTesting):
-
     def testSetUp(self):
         super().testSetUp()
-        request = self['request']
-        request['PARENTS'] = [self['app']]
+        request = self["request"]
+        request["PARENTS"] = [self["app"]]
         setRequest(request)
 
     def testTearDown(self):
@@ -179,10 +171,8 @@ class PloneSubrequestLifecycle(z2.IntegrationTesting):
 
 
 INTEGRATION_TESTING = PloneSubrequestLifecycle(
-    bases=(PLONE_SUBREQEST_FIXTURE,),
-    name='PloneSubrequest:Integration'
+    bases=(PLONE_SUBREQEST_FIXTURE,), name="PloneSubrequest:Integration"
 )
 FUNCTIONAL_TESTING = z2.FunctionalTesting(
-    bases=(PLONE_SUBREQEST_FIXTURE,),
-    name='PloneSubrequest:Functional'
+    bases=(PLONE_SUBREQEST_FIXTURE,), name="PloneSubrequest:Functional"
 )
