@@ -8,6 +8,16 @@ Changelog
 
 .. towncrier release notes start
 
+2.0.0b1 (2022-09-07)
+--------------------
+
+Breaking changes:
+
+
+- Drop Python 2 support and update code style.
+  [jensens] (#25)
+
+
 1.9.3 (2020-09-26)
 ------------------
 
