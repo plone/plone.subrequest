@@ -82,7 +82,7 @@ def subrequest(url, root=None, stdout=None, exception_handler=None):
             if root is None:
                 path = root_path + path
             else:
-                path = "{}/{}{}".format(root_path, root.virtual_url_path(), path)
+                path = f"{root_path}/{root.virtual_url_path()}{path}"
         elif root is not None:
             path = f"/{root.virtual_url_path()}{path}"
     else:
