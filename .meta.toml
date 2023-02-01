@@ -2,4 +2,9 @@
 # https://github.com/plone/meta/tree/master/config/default
 [meta]
 template = "default"
-commit-id = "05a78883"
+commit-id = "49620d68"
+
+[dependencies]
+mappings = [
+    "Zope = ['OFS', 'Products.Five', 'Products.SiteAccess', 'ZPublisher']",
+    ]
