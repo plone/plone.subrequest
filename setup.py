@@ -46,14 +46,22 @@ setup(
     zip_safe=False,
     python_requires=">=3.8",
     install_requires=[
+        "AccessControl",
+        "Acquisition",
+        "plone.protect",
         "setuptools",
+        "zope.component",
         "zope.globalrequest",
+        "zope.interface",
+        "zope.publisher",
     ],
     extras_require={
         "test": [
             "five.localsitemanager",
             "manuel",
             "plone.testing[zope]",
+            "ZServer",
+            "zope.configuration",
         ],
     },
     entry_points="""
