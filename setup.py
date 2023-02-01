@@ -60,7 +60,6 @@ setup(
             "five.localsitemanager",
             "manuel",
             "plone.testing[zope]",
-            "ZServer",
             "zope.configuration",
         ],
     },

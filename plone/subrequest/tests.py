@@ -11,14 +11,6 @@ import manuel.testing
 import unittest
 
 
-try:
-    from ZServer.HTTPResponse import ZServerHTTPResponse
-except ImportError:
-    HAS_ZSERVER = False
-else:
-    HAS_ZSERVER = True
-
-
 def traverse(url):
     request = getRequest()
     request.traverse(url)
@@ -187,25 +179,6 @@ class IntegrationTests(unittest.TestCase):
     def test_subrequest_cookies(self):
         response = subrequest("/folder1/@@test?url=/folder1/cookie")
         self.assertTrue("cookie_name" in response.cookies)
-
-    @unittest.skipUnless(HAS_ZSERVER, "needs ZServer")
-    def test_stream_iterator(self):
-        # Only a ZServerHTTPResponse is IStreamIterator Aware
-        request = getRequest()
-        request.response.__class__ = ZServerHTTPResponse
-        response = subrequest("/@@stream")
-        self.assertEqual(response.getBody(), "hello")
-
-    @unittest.skipUnless(HAS_ZSERVER, "needs ZServer")
-    def test_filestream_iterator(self):
-        # Only a ZServerHTTPResponse is IStreamIterator Aware
-        request = getRequest()
-        request.response.__class__ = ZServerHTTPResponse
-        response = subrequest("/@@filestream")
-        from ZPublisher.Iterators import filestream_iterator
-
-        self.assertTrue(isinstance(response.stdout, filestream_iterator))
-        self.assertEqual(response.getBody(), "Test")
 
     def test_other_variables(self):
         request = getRequest()
