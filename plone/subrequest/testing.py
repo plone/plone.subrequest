@@ -70,24 +70,6 @@ class SubrequestView(BrowserView):
         return response.body
 
 
-class StreamIteratorView(BrowserView):
-    def __call__(self):
-        from ZServer.tests.test_responses import test_streamiterator
-
-        response = self.request.response
-        response.setHeader("content-length", 5)
-        return test_streamiterator()
-
-
-class FileStreamIteratorView(BrowserView):
-    def __call__(self):
-        from pkg_resources import resource_filename
-        from ZPublisher.Iterators import filestream_iterator
-
-        filename = resource_filename("plone.subrequest", "testfile.txt")
-        return filestream_iterator(filename)
-
-
 def singleton(cls):
     return cls()
 
