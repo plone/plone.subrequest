@@ -7,6 +7,8 @@
 # by multiple editors to enforce common coding conventions for specific
 # file types
 
+
+
 # top-most EditorConfig file:
 # Will ignore other EditorConfig files in Home directory or upper tree level.
 root = true
