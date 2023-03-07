@@ -1,81 +1,82 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser"
-    xmlns:zcml="http://namespaces.zope.org/zcml">
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    >
 
-    <include package="plone.subrequest" />
+  <include package="plone.subrequest" />
 
-    <browser:page
-        name="cookie"
-        for="*"
-        class="plone.subrequest.testing.CookieView"
-        permission="zope.Public"
-        />
+  <browser:page
+      name="cookie"
+      for="*"
+      class="plone.subrequest.testing.CookieView"
+      permission="zope.Public"
+      />
 
-    <browser:page
-        name="parameter"
-        for="*"
-        class="plone.subrequest.testing.ParameterView"
-        permission="zope.Public"
-        />
+  <browser:page
+      name="parameter"
+      for="*"
+      class="plone.subrequest.testing.ParameterView"
+      permission="zope.Public"
+      />
 
-    <browser:page
-        name="url"
-        for="*"
-        class="plone.subrequest.testing.URLView"
-        permission="zope.Public"
-        />
+  <browser:page
+      name="url"
+      for="*"
+      class="plone.subrequest.testing.URLView"
+      permission="zope.Public"
+      />
 
-    <browser:page
-        name="response-write"
-        for="*"
-        class="plone.subrequest.testing.ResponseWriteView"
-        permission="zope.Public"
-        />
+  <browser:page
+      name="response-write"
+      for="*"
+      class="plone.subrequest.testing.ResponseWriteView"
+      permission="zope.Public"
+      />
 
-    <browser:page
-        name="error"
-        for="*"
-        class="plone.subrequest.testing.ErrorView"
-        permission="zope.Public"
-        />
+  <browser:page
+      name="error"
+      for="*"
+      class="plone.subrequest.testing.ErrorView"
+      permission="zope.Public"
+      />
 
-    <browser:page
-        name="root"
-        for="OFS.Application.Application"
-        class="plone.subrequest.testing.RootView"
-        permission="zope.Public"
-        />
+  <browser:page
+      name="root"
+      for="OFS.Application.Application"
+      class="plone.subrequest.testing.RootView"
+      permission="zope.Public"
+      />
 
-    <browser:page
-        name="test"
-        for="*"
-        class="plone.subrequest.testing.SubrequestView"
-        permission="zope.Public"
-        />
+  <browser:page
+      name="test"
+      for="*"
+      class="plone.subrequest.testing.SubrequestView"
+      permission="zope.Public"
+      />
 
-    <browser:defaultView
-        for="OFS.Folder.Folder"
-        name="test"
-        />
+  <browser:defaultView
+      name="test"
+      for="OFS.Folder.Folder"
+      />
 
-    <browser:defaultView
-        for="OFS.Application.Application"
-        name="root"
-        />
+  <browser:defaultView
+      name="root"
+      for="OFS.Application.Application"
+      />
 
-    <browser:page
-        name="custom-error"
-        for="*"
-        class="plone.subrequest.testing.CustomErrorView"
-        permission="zope.Public"
-        />
+  <browser:page
+      name="custom-error"
+      for="*"
+      class="plone.subrequest.testing.CustomErrorView"
+      permission="zope.Public"
+      />
 
-    <browser:page
-        name="index.html"
-        for="plone.subrequest.testing.CustomException"
-        class="plone.subrequest.testing.CustomExceptionHandler"
-        permission="zope.Public"
-        />
+  <browser:page
+      name="index.html"
+      for="plone.subrequest.testing.CustomException"
+      class="plone.subrequest.testing.CustomExceptionHandler"
+      permission="zope.Public"
+      />
 
 </configure>
