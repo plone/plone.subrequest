@@ -1,22 +1,24 @@
+from pathlib import Path
 from setuptools import find_packages
 from setuptools import setup
 
-import os.path
-
 
 version = "2.0.4.dev0"
+
+long_description = f"""
+{Path("README.rst").read_text()}
+\n\n
+{(Path("plone") / "subrequest" / "usage.rst").read_text()}
+\n\n
+{Path("CHANGES.rst").read_text()}
+"""
 
 setup(
     name="plone.subrequest",
     version=version,
     description="Subrequests for Zope2",
-    long_description=(
-        open("README.rst").read()
-        + "\n\n"
-        + open(os.path.join("plone", "subrequest", "usage.rst")).read()
-        + "\n\n"
-        + open("CHANGES.rst").read()
-    ),
+    long_description=long_description,
+    long_description_content_type="text/x-rst",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Environment :: Web Environment",
