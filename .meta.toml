@@ -9,3 +9,6 @@ commit-id = "b5084eff"
 mappings = [
     "Zope = ['OFS', 'Products.Five', 'Products.SiteAccess', 'ZPublisher']",
     ]
+
+[pyproject]
+codespell_ignores = "manuel"
