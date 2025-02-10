@@ -48,14 +48,9 @@ setup(
     zip_safe=False,
     python_requires=">=3.8",
     install_requires=[
-        "AccessControl",
-        "Acquisition",
-        "plone.protect",
         "setuptools",
-        "zope.component",
-        "zope.globalrequest",
-        "zope.interface",
-        "zope.publisher",
+        "plone.protect",
+        "Zope",
     ],
     extras_require={
         "test": [
