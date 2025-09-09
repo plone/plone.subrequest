@@ -8,7 +8,7 @@ version = "2.0.6.dev0"
 long_description = f"""
 {Path("README.rst").read_text()}
 \n\n
-{(Path("plone") / "subrequest" / "usage.rst").read_text()}
+{(Path("src") / "plone" / "subrequest" / "usage.rst").read_text()}
 \n\n
 {Path("CHANGES.rst").read_text()}
 """
@@ -41,8 +41,9 @@ setup(
     author_email="plone-developers@lists.sourceforge.net",
     url="https://github.com/plone/plone.subrequest",
     license="GPL version 2",
-    packages=find_packages(),
+    packages=find_packages("src"),
     namespace_packages=["plone"],
+    package_dir={"": "src"},
     include_package_data=True,
     platforms="Any",
     zip_safe=False,
