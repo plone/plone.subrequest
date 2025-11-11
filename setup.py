@@ -43,7 +43,6 @@ setup(
     zip_safe=False,
     python_requires=">=3.10",
     install_requires=[
-        "setuptools",
         "plone.protect",
         "Zope",
     ],
